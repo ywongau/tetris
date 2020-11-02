@@ -40,7 +40,7 @@ describe('engine', () => {
     expect(result.tetromino.left).to.equal(0);
   });
 
-  it('locks the Tetromino after it is landed', () => {
+  it('locks the Tetromino after it landed', () => {
     const playfield = [
       [_, _, _, _, _],
       [_, _, _, _, _],
