@@ -25,7 +25,7 @@ describe('engine', () => {
         [_, _, _, _],
       ]
     };
-    var result = engine.next({
+    const result = engine.next({
       playfield,
       tetromino
     });
@@ -58,7 +58,7 @@ describe('engine', () => {
         [_, _, _, _],
       ]
     };
-    var result = engine.next({
+    const result = engine.next({
       playfield,
       tetromino
     });
