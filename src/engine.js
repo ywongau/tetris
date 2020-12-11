@@ -1,7 +1,9 @@
 const getBlock = (tetromino, playfieldX, playfieldY) =>
-  tetromino.shape[playfieldY - tetromino.top + 1]?.[playfieldX - tetromino.left];
+  tetromino.shape[playfieldY - tetromino.top + 1]?.[
+    playfieldX - tetromino.left
+  ];
 
-const merge = ( playfield, tetromino) =>
+const merge = (playfield, tetromino) =>
   playfield.map((row, y) =>
     row.map((hasABlock, x) => hasABlock || getBlock(tetromino, x, y) === true)
   );
@@ -9,7 +11,12 @@ const merge = ( playfield, tetromino) =>
 const next = (width, height) => ({ playfield, tetromino }) => {
   const movedTetromino = { ...tetromino, top: tetromino.top + 1 };
   const landed = movedTetromino.shape.some((row, y) =>
-    row.some((hasABlock) => hasABlock && y + movedTetromino.top >= height)
+    row.some(
+      (hasABlock, x) =>
+        hasABlock &&
+        (y + movedTetromino.top >= height ||
+          playfield[y + movedTetromino.top + 1]?.[x + movedTetromino.left])
+    )
   );
   return landed
     ? { playfield: merge(playfield, movedTetromino), tetromino: null }
@@ -17,5 +24,5 @@ const next = (width, height) => ({ playfield, tetromino }) => {
 };
 
 export default (width, height) => ({
-  next: next(width, height)
+  next: next(width, height),
 });
