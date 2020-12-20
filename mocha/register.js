@@ -1,5 +1,8 @@
 require('@babel/register')({
-    extensions: ['.js'],
-    presets: ['@babel/env'],
-  });
-  
+  extensions: ['.js', '.jsx'],
+  presets: ['react-app', '@babel/env'],
+  plugins: []
+});
+
+require('jsdom-global/register');
+require('ignore-styles');
