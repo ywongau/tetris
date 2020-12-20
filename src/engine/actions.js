@@ -27,7 +27,7 @@ export const rotateLeft = (tetromino, playfield) =>
     {
       ...tetromino,
       shape: tetromino.shape.map((row, y) =>
-        row.map((_, x) => tetromino.shape[x][3 - y])
+        row.map((_, x) => tetromino.shape[x][tetromino.shape.length - 1 - y])
       )
     },
     tetromino,
@@ -38,7 +38,7 @@ export const rotateRight = (tetromino, playfield) =>
     {
       ...tetromino,
       shape: tetromino.shape.map((row, y) =>
-        row.map((_, x) => tetromino.shape[3 - x][y])
+        row.map((_, x) => tetromino.shape[tetromino.shape.length - 1 - x][y])
       )
     },
     tetromino,

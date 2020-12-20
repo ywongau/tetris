@@ -6,7 +6,7 @@ const _ = false;
 const o = true;
 // https://tetris.fandom.com/wiki/Tetris_Guideline
 describe('rotate left', () => {
-  it('works', () => {
+  it('works for a 4x4 tetromino', () => {
     const playfield = [
       [_, _, _, _, _],
       [_, _, _, _, _],
@@ -33,6 +33,34 @@ describe('rotate left', () => {
         [_, _, _, _],
         [o, o, o, o],
         [_, _, _, _]
+      ]
+    });
+  });
+  it('works for a 3x3 tetromino', () => {
+    const playfield = [
+      [_, _, _, _, _],
+      [_, _, _, _, _],
+      [_, _, _, _, _],
+      [_, _, _, _, _],
+      [_, _, _, _, _]
+    ];
+    const tetromino = {
+      left: 0,
+      top: 0,
+      shape: [
+        [_, o, _],
+        [o, o, o],
+        [_, _, _]
+      ]
+    };
+    const result = rotateLeft(tetromino, playfield);
+    expect(result).to.deep.equal({
+      left: 0,
+      top: 0,
+      shape: [
+        [_, o, _],
+        [o, o, _],
+        [_, o, _]
       ]
     });
   });
@@ -150,6 +178,34 @@ describe('rotate right', () => {
         [o, o, o, o],
         [_, _, _, _],
         [_, _, _, _]
+      ]
+    });
+  });
+  it('works for a 3x3 tetromino', () => {
+    const playfield = [
+      [_, _, _, _, _],
+      [_, _, _, _, _],
+      [_, _, _, _, _],
+      [_, _, _, _, _],
+      [_, _, _, _, _]
+    ];
+    const tetromino = {
+      left: 0,
+      top: 0,
+      shape: [
+        [_, o, _],
+        [o, o, o],
+        [_, _, _]
+      ]
+    };
+    const result = rotateRight(tetromino, playfield);
+    expect(result).to.deep.equal({
+      left: 0,
+      top: 0,
+      shape: [
+        [_, o, _],
+        [_, o, o],
+        [_, o, _]
       ]
     });
   });
