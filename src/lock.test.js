@@ -1,13 +1,11 @@
-import Engine from './engine';
 import { expect } from 'chai';
+import { lock } from './lock';
+
 const _ = false;
 const o = true;
-const width = 5;
-const height = 5;
-const engine = Engine(width, height);
 // https://tetris.fandom.com/wiki/Tetris_Guideline
-describe('engine', () => {
-  it('must move down to doom each tick', () => {
+describe('lock', () => {
+  it(`does not lock if the tetromino didn't land on anything`, () => {
     const playfield = [
       [_, _, _, _, _],
       [_, _, _, _, _],
@@ -25,10 +23,7 @@ describe('engine', () => {
         [_, _, _, _]
       ]
     };
-    const result = engine.next({
-      playfield,
-      tetromino
-    });
+    const result = lock(tetromino, playfield);
     expect(result.playfield).to.deep.equal([
       [_, _, _, _, _],
       [_, _, _, _, _],
@@ -36,8 +31,7 @@ describe('engine', () => {
       [_, _, _, _, _],
       [_, _, _, _, _]
     ]);
-    expect(result.tetromino.top).to.equal(1);
-    expect(result.tetromino.left).to.equal(0);
+    expect(result.locked).to.equal(false);
   });
 
   it('locks the Tetromino after it landed', () => {
@@ -50,7 +44,7 @@ describe('engine', () => {
     ];
     const tetromino = {
       left: 1,
-      top: 2,
+      top: 3,
       shape: [
         [_, _, _, _],
         [_, o, o, _],
@@ -58,10 +52,7 @@ describe('engine', () => {
         [_, _, _, _]
       ]
     };
-    const result = engine.next({
-      playfield,
-      tetromino
-    });
+    const result = lock(tetromino, playfield);
     expect(result.playfield).to.deep.equal([
       [_, _, _, _, _],
       [_, _, _, _, _],
@@ -69,7 +60,7 @@ describe('engine', () => {
       [_, _, o, o, _],
       [_, _, o, o, _]
     ]);
-    expect(result.tetromino).to.deep.equal(null);
+    expect(result.locked).to.deep.equal(true);
   });
 
   it('locks the Tetromino after it landed on locked blocks', () => {
@@ -82,7 +73,7 @@ describe('engine', () => {
     ];
     const tetromino = {
       left: 1,
-      top: 1,
+      top: 2,
       shape: [
         [_, _, _, _],
         [_, o, o, _],
@@ -90,10 +81,7 @@ describe('engine', () => {
         [_, _, _, _]
       ]
     };
-    const result = engine.next({
-      playfield,
-      tetromino
-    });
+    const result = lock(tetromino, playfield);
     expect(result.playfield).to.deep.equal([
       [_, _, _, _, _],
       [_, _, _, _, _],
@@ -101,6 +89,6 @@ describe('engine', () => {
       [_, _, o, o, _],
       [_, _, _, o, _]
     ]);
-    expect(result.tetromino).to.deep.equal(null);
+    expect(result.locked).to.deep.equal(true);
   });
 });
