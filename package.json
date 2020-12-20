@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "test": "cross-env NODE_ENV=test mocha --watch",
+    "test": "cross-env NODE_ENV=test mocha",
+    "dev": "cross-env NODE_ENV=test mocha --watch",
     "start": "live-server"
   },
   "devDependencies": {
