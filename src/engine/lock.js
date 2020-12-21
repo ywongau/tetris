@@ -3,7 +3,7 @@ const merge = (tetromino, playfield) =>
     row.map(
       (occupied, x) =>
         occupied ||
-        tetromino.shape[y - tetromino.top + 1]?.[x - tetromino.left] === true
+        tetromino.shape[y - tetromino.top]?.[x - tetromino.left]
     )
   );
 
@@ -13,7 +13,7 @@ export const lock = (tetromino, playfield) => {
     row.some(
       (occupied, x) =>
         occupied &&
-        (y + tetromino.top >= height ||
+        (y + tetromino.top >= height - 1 ||
           playfield[y + tetromino.top + 1]?.[x + tetromino.left])
     )
   );

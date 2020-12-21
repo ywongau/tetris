@@ -1,37 +1,72 @@
 const _ = false;
 const o = true;
-export const O = [
-  [o, o],
-  [o, o]
-];
-export const I = [
-  [_, o, _, _],
-  [_, o, _, _],
-  [_, o, _, _],
-  [_, o, _, _]
-];
-export const S = [
-  [_, o, o],
-  [_, o, _],
-  [o, o, _]
-];
-export const Z = [
-  [o, o, _],
-  [_, o, _],
-  [_, o, o]
-];
-export const T = [
-  [_, _, _],
-  [o, o, o],
-  [_, o, _]
-];
-export const J = [
-  [_, o, _],
-  [_, o, _],
-  [o, o, _]
-];
-export const L = [
-  [_, o, _],
-  [_, o, _],
-  [_, o, o]
-];
+export const O = {
+  top: 0,
+  left: 4,
+  name: 'O',
+  shape: [
+    ['O', 'O'],
+    ['O', 'O']
+  ]
+};
+export const I = {
+  top: 0,
+  left: 3,
+  name: 'I',
+  shape: [
+    [_, 'I', _, _],
+    [_, 'I', _, _],
+    [_, 'I', _, _],
+    [_, 'I', _, _]
+  ]
+};
+export const S = {
+  top: 0,
+  left: 3,
+  name: 'S',
+  shape: [
+    [_, 'S', 'S'],
+    ['S', 'S', _],
+    [_, _, _]
+  ]
+};
+export const Z = {
+  top: 0,
+  left: 3,
+  name: 'Z',
+  shape: [
+    ['Z', 'Z', _],
+    [_, 'Z', 'Z'],
+    [_, _, _]
+  ]
+};
+export const T = {
+  top: 0,
+  left: 3,
+  name: 'T',
+  shape: [
+    [_, _, _],
+    ['T', 'T', 'T'],
+    [_, 'T', _]
+  ]
+};
+export const J = {
+  top: 0,
+  left: 3,
+  name: 'J',
+  shape: [
+    [_, 'J', _],
+    [_, 'J', _],
+    ['J', 'J', _]
+  ]
+};
+export const L = {
+  top: 0,
+  left: 3,
+  name: 'L',
+  shape: [
+    [_, 'L', _],
+    [_, 'L', _],
+    [_, 'L', 'L']
+  ]
+};

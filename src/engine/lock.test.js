@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { lock } from './lock';
 
-const _ = false;
+const _ = undefined;
 const o = true;
 // https://tetris.fandom.com/wiki/Tetris_Guideline
 describe('lock', () => {
@@ -17,10 +17,8 @@ describe('lock', () => {
       left: 0,
       top: 0,
       shape: [
-        [_, _, _, _],
-        [_, o, o, _],
-        [_, o, o, _],
-        [_, _, _, _]
+        [o, o],
+        [o, o]
       ]
     };
     const result = lock(tetromino, playfield);
@@ -43,13 +41,11 @@ describe('lock', () => {
       [_, _, _, _, _]
     ];
     const tetromino = {
-      left: 1,
+      left: 0,
       top: 3,
       shape: [
-        [_, _, _, _],
-        [_, o, o, _],
-        [_, o, o, _],
-        [_, _, _, _]
+        [o, o],
+        [o, o]
       ]
     };
     const result = lock(tetromino, playfield);
@@ -57,8 +53,8 @@ describe('lock', () => {
       [_, _, _, _, _],
       [_, _, _, _, _],
       [_, _, _, _, _],
-      [_, _, o, o, _],
-      [_, _, o, o, _]
+      [o, o, _, _, _],
+      [o, o, _, _, _]
     ]);
     expect(result.locked).to.deep.equal(true);
   });
@@ -72,13 +68,11 @@ describe('lock', () => {
       [_, _, _, o, _]
     ];
     const tetromino = {
-      left: 1,
+      left: 2,
       top: 2,
       shape: [
-        [_, _, _, _],
-        [_, o, o, _],
-        [_, o, o, _],
-        [_, _, _, _]
+        [o, o],
+        [o, o]
       ]
     };
     const result = lock(tetromino, playfield);

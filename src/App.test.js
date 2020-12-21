@@ -4,9 +4,8 @@ import App from './App';
 import React from 'react';
 
 describe('app', () => {
-  beforeEach(cleanup);
+  afterEach(cleanup);
   it('works', () => {
     render(<App />);
-    screen.getByText(/learn react/i);
   });
 });

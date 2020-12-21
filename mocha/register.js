@@ -4,5 +4,4 @@ require('@babel/register')({
   plugins: []
 });
 
-require('jsdom-global/register');
 require('ignore-styles');
