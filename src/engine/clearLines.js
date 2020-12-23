@@ -1,5 +1,5 @@
 const emptyLines = (width, height) =>
-  [...Array(height)].map(() => [...Array(width)].map(() => false));
+  [...Array(height)].map(() => [...Array(width)].map(() => undefined));
 
 export const clearLines = (playfield) => {
   const width = playfield[0].length;
@@ -7,9 +7,9 @@ export const clearLines = (playfield) => {
     (acc, row) => (row.every((occupied) => occupied) ? acc : [row].concat(acc)),
     []
   );
-  const rowsCleared = playfield.length - clearedPlayfield.length;
+  const linesCleared = playfield.length - clearedPlayfield.length;
   return {
-    playfield: emptyLines(width, rowsCleared).concat(clearedPlayfield),
-    rowsCleared
+    playfield: emptyLines(width, linesCleared).concat(clearedPlayfield),
+    linesCleared
   };
 };

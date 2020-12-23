@@ -1,4 +1,4 @@
-import { I, J, L, O, S, T, Z } from './tetrominos';
+import { I, J, L, O, S, T, Z } from './tetrominoes';
 
 import { expect } from 'chai';
 import { randomizer } from './randomizer';

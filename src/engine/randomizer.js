@@ -1,4 +1,4 @@
-import { I, J, L, O, S, T, Z } from './tetrominos';
+import { I, J, L, O, S, T, Z } from './tetrominoes';
 
 const shuffle = (xs) => {
   const result = xs.slice(0);
@@ -12,6 +12,6 @@ const shuffle = (xs) => {
   }
   return result;
 };
-const tetrominos = [I, O, T, S, Z, J, L];
+const tetrominoes = [I, O, T, S, Z, J, L];
 
-export const randomizer = () => shuffle(tetrominos);
+export const randomizer = () => shuffle(tetrominoes);

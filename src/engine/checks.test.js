@@ -1,10 +1,11 @@
+import { alive, lock } from './checks';
+
 import { expect } from 'chai';
-import { lock } from './checks';
 
 const _ = undefined;
 const o = true;
 // https://tetris.fandom.com/wiki/Tetris_Guideline
-describe('lock', () => {
+describe('checks', () => {
   it(`does not lock if the tetromino didn't land on anything`, () => {
     const playfield = [
       [_, _, _, _, _],
@@ -84,5 +85,43 @@ describe('lock', () => {
       [_, _, _, o, _]
     ]);
     expect(result.locked).to.deep.equal(true);
+  });
+  it('is alive if the tetromino does not overlap any blocks in the playfield', () => {
+    const playfield = [
+      [_, _, _, _, _],
+      [_, _, _, _, _],
+      [_, _, _, o, _],
+      [_, _, _, o, _],
+      [_, _, _, o, _]
+    ];
+    const tetromino = {
+      left: 2,
+      top: 0,
+      shape: [
+        [o, o],
+        [o, o]
+      ]
+    };
+    const result = alive(tetromino, playfield);
+    expect(result).to.equal(true);
+  });
+  it('is dead if the tetromino overlaps any blocks in the playfield', () => {
+    const playfield = [
+      [_, _, _, _, _],
+      [_, _, _, o, _],
+      [_, _, _, o, _],
+      [_, _, _, o, _],
+      [_, _, _, o, _]
+    ];
+    const tetromino = {
+      left: 2,
+      top: 0,
+      shape: [
+        [o, o],
+        [o, o]
+      ]
+    };
+    const result = alive(tetromino, playfield);
+    expect(result).to.equal(false);
   });
 });
