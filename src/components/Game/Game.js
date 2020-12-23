@@ -4,7 +4,7 @@ const Game = (customHook) => () => {
   const { state } = customHook();
   return (
     <>
-      <div class="frame">
+      <div className="frame">
         <div data-testid="playfield" className="playfield">
           {state.playfield.map((row, y) => (
             <div
@@ -34,13 +34,13 @@ const Game = (customHook) => () => {
       </div>
       <div className="frame">
         <h1>NEXT</h1>
-        <div class="next-tetrominoes">
-          {state.queue.slice(0, 3).map((tetromino) => (
-            <div className="next-tetromino">
+        <div className="next-tetrominoes">
+          {state.queue.slice(0, 3).map((tetromino, i) => (
+            <div className="next-tetromino" key={i}>
               {tetromino.shape.map((row, y) => (
-                <div key={y} class="row">
-                  {row.map((block) => (
-                    <div className={block}></div>
+                <div key={y} className="row">
+                  {row.map((block, x) => (
+                    <div className={block} key={x}></div>
                   ))}
                 </div>
               ))}
@@ -48,7 +48,7 @@ const Game = (customHook) => () => {
           ))}
         </div>
         <h1>LINES</h1>
-        <div class="lines">{state.lines}</div>
+        <div className="lines">{state.lines}</div>
       </div>
     </>
   );

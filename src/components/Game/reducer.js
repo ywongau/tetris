@@ -7,7 +7,6 @@ import {
 } from '../../engine/actions';
 
 import { clearLines } from '../../engine/clearLines';
-import { randomizer } from '../../engine/randomizer';
 
 export const phases = {
   spawning: 'spawning',
@@ -16,24 +15,22 @@ export const phases = {
   clearing: 'clearing'
 };
 
-const lockAndClear = (state) => {
+const doLock = (state) => {
   if (state.phase !== phases.descending && state.phase !== phases.locking)
     return state;
   const { tetromino, playfield } = state;
   const lockResult = lock(tetromino, playfield);
-  if (lockResult.locked) {
-    return {
-      ...state,
-      tetromino: undefined,
-      playfield: lockResult.playfield,
-      phase: phases.clearing
-    };
-  } else {
-    return {
-      ...state,
-      phase: phases.descending
-    };
-  }
+  return lockResult.locked
+    ? {
+        ...state,
+        tetromino: undefined,
+        playfield: lockResult.playfield,
+        phase: phases.clearing
+      }
+    : {
+        ...state,
+        phase: phases.descending
+      };
 };
 
 const visitors = {
@@ -55,7 +52,7 @@ const visitors = {
     const { tetromino, playfield } = state;
     const updatedTetromino = move(tetromino, playfield, action.payload);
     return state.phase === phases.locking && action.payload === directions.down
-      ? lockAndClear(state)
+      ? doLock(state)
       : {
           ...state,
           tetromino: updatedTetromino,
@@ -66,7 +63,7 @@ const visitors = {
               : phases.descending
         };
   },
-  lock: lockAndClear,
+  lock: doLock,
   clear: (state) => {
     const { playfield } = state;
     const clearResult = clearLines(playfield);
@@ -112,6 +109,4 @@ const visitors = {
     };
   }
 };
-export const reducer = (state, action) => {
-  return visitors[action.type](state, action);
-};
+export const reducer = (state, action) => visitors[action.type](state, action);

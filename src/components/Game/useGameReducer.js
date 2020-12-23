@@ -1,7 +1,7 @@
-import { directions, move, rotateRight } from '../../engine/actions';
 import { phases, reducer } from './reducer';
 import { useEffect, useReducer } from 'react';
 
+import { directions } from '../../engine/actions';
 import { randomizer } from '../../engine/randomizer';
 
 const keyMappings = {
