@@ -13,7 +13,7 @@ export const landed = (tetromino, playfield) => {
       (occupied, x) =>
         occupied &&
         (y + tetromino.top >= height - 1 ||
-          playfield[y + tetromino.top + 1]?.[x + tetromino.left])
+          playfield[y + tetromino.top + 1][x + tetromino.left])
     )
   );
 };
@@ -30,6 +30,6 @@ export const alive = (tetromino, playfield) =>
   !tetromino.shape.some((row, y) =>
     row.some(
       (occupied, x) =>
-        occupied && playfield[y + tetromino.top]?.[x + tetromino.left]
+        occupied && playfield[y + tetromino.top][x + tetromino.left]
     )
   );

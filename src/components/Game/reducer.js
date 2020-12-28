@@ -12,12 +12,11 @@ export const phases = {
   spawning: 'spawning',
   descending: 'descending',
   locking: 'locking',
-  clearing: 'clearing'
+  clearing: 'clearing',
+  gameOver: 'gameOver'
 };
 
 const doLock = (state) => {
-  if (state.phase !== phases.descending && state.phase !== phases.locking)
-    return state;
   const { tetromino, playfield } = state;
   const lockResult = lock(tetromino, playfield);
   return lockResult.locked
@@ -35,7 +34,6 @@ const doLock = (state) => {
 
 const visitors = {
   tick: (state) => {
-    if (state.phase !== phases.descending) return state;
     const { tetromino, playfield } = state;
     const updatedTetromino = move(tetromino, playfield, directions.down);
     return {
@@ -47,20 +45,17 @@ const visitors = {
     };
   },
   move: (state, action) => {
-    if (state.phase !== phases.descending && state.phase !== phases.locking)
-      return state;
     const { tetromino, playfield } = state;
     const updatedTetromino = move(tetromino, playfield, action.payload);
+    console.log('landed', landed(updatedTetromino, playfield));
     return state.phase === phases.locking && action.payload === directions.down
       ? doLock(state)
       : {
           ...state,
           tetromino: updatedTetromino,
-          phase:
-            action.payload === directions.down &&
-            landed(updatedTetromino, playfield)
-              ? phases.locking
-              : phases.descending
+          phase: landed(updatedTetromino, playfield)
+            ? phases.locking
+            : phases.descending
         };
   },
   lock: doLock,
@@ -68,19 +63,15 @@ const visitors = {
     const { playfield } = state;
     const clearResult = clearLines(playfield);
     const lines = state.lines + clearResult.linesCleared;
-    return state.phase === phases.clearing
-      ? {
-          ...state,
-          playfield: clearResult.playfield,
-          lines,
-          interval: Math.max(200, 1000 - Math.floor(lines / 10) * 50),
-          phase: phases.spawning
-        }
-      : state;
+    return {
+      ...state,
+      playfield: clearResult.playfield,
+      lines,
+      interval: Math.max(200, 1000 - Math.floor(lines / 10) * 50),
+      phase: phases.spawning
+    };
   },
   rotateRight: (state) => {
-    if (state.phase !== phases.descending && state.phase !== phases.locking)
-      return state;
     const { tetromino, playfield } = state;
     return {
       ...state,
@@ -88,8 +79,6 @@ const visitors = {
     };
   },
   rotateLeft: (state) => {
-    if (state.phase !== phases.descending && state.phase !== phases.locking)
-      return state;
     const { tetromino, playfield } = state;
     return {
       ...state,
@@ -100,13 +89,26 @@ const visitors = {
     const { queue, playfield } = state;
     const newTetromino = queue[0];
     const newQueue = queue.slice(1).concat(action.payload || []);
+    const isAlive = alive(newTetromino, playfield);
     return {
       ...state,
       tetromino: newTetromino,
-      phase: phases.descending,
+      phase: isAlive ? phases.descending : phases.gameOver,
       queue: newQueue,
-      alive: alive(newTetromino, playfield)
+      alive: isAlive
     };
   }
 };
-export const reducer = (state, action) => visitors[action.type](state, action);
+const validPhases = {
+  tick: [phases.descending, phases.locking],
+  move: [phases.descending, phases.locking],
+  lock: [phases.locking],
+  clear: [phases.clearing],
+  rotateLeft: [phases.descending, phases.locking],
+  rotateRight: [phases.descending, phases.locking],
+  spawn: [phases.spawning]
+};
+export const reducer = (state, action) =>
+  validPhases[action.type]?.includes(state.phase)
+    ? visitors[action.type](state, action)
+    : state;

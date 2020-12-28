@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "test": "cross-env NODE_ENV=test mocha",
+    "test": "cross-env NODE_ENV=test nyc mocha --no-watch",
     "dev": "cross-env NODE_ENV=test mocha --watch",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
@@ -24,6 +24,7 @@
     "jsdom": "^16.4.0",
     "live-server": "^1.2.1",
     "mocha": "^8.2.1",
+    "nyc": "^15.1.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",
@@ -45,6 +46,24 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "nyc": {
+    "branches": 100,
+    "lines": 100,
+    "functions": 100,
+    "statements": 100,
+    "check-coverage": true,
+    "instrument": true,
+    "exclude": [
+      "mocha",
+      "src/stubs",
+      "server/**",
+      "**/**.test.{ts,tsx,js,jsx}"
+    ],
+    "reporter": [
+      "text",
+      "lcov"
     ]
   }
 }

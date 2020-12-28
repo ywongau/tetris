@@ -386,7 +386,7 @@ describe('move', () => {
       ]
     });
   });
-  it('does nothing if there is no space available', () => {
+  it('does nothing if there is no space available on the left', () => {
     const playfield = [
       [_, _, _, _, _],
       [_, _, _, _, _],
@@ -405,6 +405,27 @@ describe('move', () => {
       ]
     };
     const result = move(tetromino, playfield, directions.left);
+    expect(result).to.deep.equal(tetromino);
+  });
+  it('does nothing if there is no space available on the left', () => {
+    const playfield = [
+      [_, _, _, _, _],
+      [_, _, _, _, _],
+      [_, _, _, _, _],
+      [_, _, _, _, _],
+      [_, _, _, _, _]
+    ];
+    const tetromino = {
+      left: 3,
+      top: 0,
+      shape: [
+        [_, o, _, _],
+        [_, o, _, _],
+        [_, o, _, _],
+        [_, o, _, _]
+      ]
+    };
+    const result = move(tetromino, playfield, directions.right);
     expect(result).to.deep.equal(tetromino);
   });
 });

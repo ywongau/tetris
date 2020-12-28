@@ -111,6 +111,18 @@ describe('reducer', () => {
       tetromino: undefined
     });
   });
+  it('still allows move when locking', () => {
+    const tetromino = { ...O, top: 18 };
+    const result = reducer(
+      { ...initialState, tetromino, phase: phases.locking },
+      { type: 'move', payload: directions.right }
+    );
+    expect(result).to.deep.equal({
+      ...initialState,
+      phase: phases.locking,
+      tetromino: { ...tetromino, left: tetromino.left + 1 }
+    });
+  });
   it('does not set locking to true before a tetromino is landed', () => {
     const result = reducer(
       { ...initialState, tetromino: { ...O, top: 16 } },
@@ -187,7 +199,7 @@ describe('reducer', () => {
   });
   it('spawns a tetrimino from the queue', () => {
     const result = reducer(
-      { ...initialState, tetromino: undefined },
+      { ...initialState, tetromino: undefined, phase: phases.spawning },
       {
         type: 'spawn'
       }
@@ -195,12 +207,18 @@ describe('reducer', () => {
     expect(result).to.deep.equal({
       ...initialState,
       tetromino: I,
-      queue: initialState.queue.slice(1)
+      queue: initialState.queue.slice(1),
+      phase: phases.descending
     });
   });
   it('appends provided tetriminos into the queue', () => {
     const result = reducer(
-      { ...initialState, tetromino: undefined, queue: [I, O, S] },
+      {
+        ...initialState,
+        tetromino: undefined,
+        queue: [I, O, S],
+        phase: phases.spawning
+      },
       {
         type: 'spawn',
         payload: [I, O, T, S, Z, J, L]
@@ -216,6 +234,7 @@ describe('reducer', () => {
     const state = {
       ...initialState,
       tetromino: undefined,
+      phase: phases.spawning,
       playfield: [...Array(20)].map(() => [...Array(10)].map(() => 'I'))
     };
     const result = reducer(state, {
@@ -225,7 +244,8 @@ describe('reducer', () => {
       ...state,
       tetromino: I,
       queue: initialState.queue.slice(1),
-      alive: false
+      alive: false,
+      phase: phases.gameOver
     });
   });
 });

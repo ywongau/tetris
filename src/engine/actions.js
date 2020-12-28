@@ -8,7 +8,7 @@ const isPositionValid = (tetromino, playfield) => {
         (x + tetromino.left < 0 ||
           x + tetromino.left >= width ||
           y + tetromino.top >= height ||
-          playfield[y + tetromino.top]?.[x + tetromino.left])
+          playfield[y + tetromino.top][x + tetromino.left])
     )
   );
 };

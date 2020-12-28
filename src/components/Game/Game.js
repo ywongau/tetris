@@ -21,7 +21,7 @@ const Game = (customHook) => () => {
                   key={x}
                   className={
                     state.tetromino?.shape?.[y - state.tetromino.top]?.[
-                      x - state.tetromino?.left
+                      x - state.tetromino.left
                     ] ||
                     block ||
                     ''

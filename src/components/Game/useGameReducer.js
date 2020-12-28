@@ -2,6 +2,7 @@ import { phases, reducer } from './reducer';
 import { useEffect, useReducer } from 'react';
 
 import { directions } from '../../engine/actions';
+import { move } from '../../sfx/audio';
 import { randomizer } from '../../engine/randomizer';
 
 const keyMappings = {
@@ -41,10 +42,12 @@ export const useGameReducer = () => {
         ),
       [phases.locking]: () =>
         setTimeout(
-          () =>
+          () => (
+            console.log('locking'),
             dispatch({
               type: 'lock'
-            }),
+            })
+          ),
           500
         ),
       [phases.clearing]: () =>
@@ -62,6 +65,7 @@ export const useGameReducer = () => {
     const onKeydown = (e) => {
       if (keyMappings[e.key]) {
         dispatch({ type: 'move', payload: keyMappings[e.key] });
+        move();
       }
       if (e.key === 'ArrowUp') {
         dispatch({ type: 'rotateRight' });
