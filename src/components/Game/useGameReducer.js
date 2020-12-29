@@ -1,16 +1,16 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+
 import { phases, reducer } from './reducer';
 import { useEffect, useReducer } from 'react';
 
 import { directions } from '../../engine/actions';
-import { move } from '../../sfx/audio';
-import { randomizer } from '../../engine/randomizer';
 
 const keyMappings = {
   ArrowLeft: directions.left,
   ArrowRight: directions.right,
   ArrowDown: directions.down
 };
-export const useGameReducer = () => {
+export const UseGameReducer = (audio, randomizer) => () => {
   const queue = randomizer();
   const tetromino = queue[0];
   const [state, dispatch] = useReducer(reducer, {
@@ -30,6 +30,11 @@ export const useGameReducer = () => {
     return () => clearInterval(handle);
   }, [state.alive, state.interval]);
   useEffect(() => {
+    if (state.sfx) {
+      audio[state.sfx]();
+    }
+  }, [state.sfx]);
+  useEffect(() => {
     const phaseVisitors = {
       [phases.spawning]: () =>
         setTimeout(
@@ -41,15 +46,9 @@ export const useGameReducer = () => {
           500
         ),
       [phases.locking]: () =>
-        setTimeout(
-          () => (
-            console.log('locking'),
-            dispatch({
-              type: 'lock'
-            })
-          ),
-          500
-        ),
+        setTimeout(() => dispatch({
+          type: 'lock'
+        }), 500),
       [phases.clearing]: () =>
         setTimeout(
           () =>
@@ -65,7 +64,6 @@ export const useGameReducer = () => {
     const onKeydown = (e) => {
       if (keyMappings[e.key]) {
         dispatch({ type: 'move', payload: keyMappings[e.key] });
-        move();
       }
       if (e.key === 'ArrowUp') {
         dispatch({ type: 'rotateRight' });

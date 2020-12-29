@@ -24,6 +24,7 @@ const doLock = (state) => {
         ...state,
         tetromino: undefined,
         playfield: lockResult.playfield,
+        sfx: 'locked',
         phase: phases.clearing
       }
     : {
@@ -47,7 +48,6 @@ const visitors = {
   move: (state, action) => {
     const { tetromino, playfield } = state;
     const updatedTetromino = move(tetromino, playfield, action.payload);
-    console.log('landed', landed(updatedTetromino, playfield));
     return state.phase === phases.locking && action.payload === directions.down
       ? doLock(state)
       : {
@@ -67,7 +67,11 @@ const visitors = {
       ...state,
       playfield: clearResult.playfield,
       lines,
-      interval: Math.max(200, 1000 - Math.floor(lines / 10) * 50),
+      sfx:
+        clearResult.linesCleared > 0
+          ? 'clear' + clearResult.linesCleared
+          : undefined,
+      interval: Math.max(100, 1000 - Math.floor(lines / 10) * 50),
       phase: phases.spawning
     };
   },
@@ -94,6 +98,7 @@ const visitors = {
       ...state,
       tetromino: newTetromino,
       phase: isAlive ? phases.descending : phases.gameOver,
+      sfx: isAlive ? 'spawn' : 'gameOver',
       queue: newQueue,
       alive: isAlive
     };

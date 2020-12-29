@@ -108,6 +108,7 @@ describe('reducer', () => {
       ...initialState,
       playfield: lock(tetromino, initialState.playfield).playfield,
       phase: phases.clearing,
+      sfx: 'locked',
       tetromino: undefined
     });
   });
@@ -144,6 +145,7 @@ describe('reducer', () => {
       ...initialState,
       playfield: lock(tetromino, initialState.playfield).playfield,
       tetromino: undefined,
+      sfx: 'locked',
       phase: phases.clearing
     });
   });
@@ -176,6 +178,7 @@ describe('reducer', () => {
       playfield: initialState.playfield,
       phase: phases.spawning,
       tetromino: undefined,
+      sfx: 'clear1',
       lines: 1
     });
   });
@@ -207,6 +210,7 @@ describe('reducer', () => {
     expect(result).to.deep.equal({
       ...initialState,
       tetromino: I,
+      sfx: 'spawn',
       queue: initialState.queue.slice(1),
       phase: phases.descending
     });
@@ -227,6 +231,7 @@ describe('reducer', () => {
     expect(result).to.deep.equal({
       ...initialState,
       tetromino: I,
+      sfx: 'spawn',
       queue: [O, S, I, O, T, S, Z, J, L]
     });
   });
@@ -245,6 +250,7 @@ describe('reducer', () => {
       tetromino: I,
       queue: initialState.queue.slice(1),
       alive: false,
+      sfx: 'gameOver',
       phase: phases.gameOver
     });
   });

@@ -3,5 +3,4 @@ require('@babel/register')({
   presets: ['react-app', '@babel/env'],
   plugins: []
 });
-
-require('ignore-styles');
+require('ignore-styles').default(['.css', '.mp3']);
