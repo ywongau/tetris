@@ -1,11 +1,3 @@
-const merge = (tetromino, playfield) =>
-  playfield.map((row, y) =>
-    row.map(
-      (occupied, x) =>
-        occupied || tetromino.shape[y - tetromino.top]?.[x - tetromino.left]
-    )
-  );
-
 export const landed = (tetromino, playfield) => {
   const height = playfield.length;
   return tetromino.shape.some((row, y) =>
@@ -18,13 +10,6 @@ export const landed = (tetromino, playfield) => {
   );
 };
 
-export const lock = (tetromino, playfield) => {
-  const locked = landed(tetromino, playfield);
-  return {
-    playfield: locked ? merge(tetromino, playfield) : playfield,
-    locked
-  };
-};
 
 export const alive = (tetromino, playfield) =>
   !tetromino.shape.some((row, y) =>

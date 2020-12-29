@@ -1,6 +1,7 @@
-import { alive, landed, lock } from '../../engine/checks';
+import { alive, landed } from '../../engine/checks';
 import {
   directions,
+  lock,
   move,
   rotateLeft,
   rotateRight
@@ -105,7 +106,7 @@ const visitors = {
   }
 };
 const validPhases = {
-  tick: [phases.descending, phases.locking],
+  tick: [phases.descending],
   move: [phases.descending, phases.locking],
   lock: [phases.locking],
   clear: [phases.clearing],

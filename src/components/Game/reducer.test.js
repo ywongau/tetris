@@ -1,9 +1,13 @@
 import { I, J, L, O, S, T, Z } from '../../engine/tetrominoes';
-import { directions, rotateLeft, rotateRight } from '../../engine/actions';
+import {
+  directions,
+  lock,
+  rotateLeft,
+  rotateRight
+} from '../../engine/actions';
 import { phases, reducer } from './reducer';
 
 import { expect } from 'chai';
-import { lock } from '../../engine/checks';
 
 const initialState = {
   playfield: [...Array(20)].map(() => [...Array(10)].map(() => undefined)),

@@ -1,3 +1,4 @@
+import { landed } from './checks';
 const isPositionValid = (tetromino, playfield) => {
   const width = playfield[0].length;
   const height = playfield.length;
@@ -76,3 +77,18 @@ export const move = (tetromino, playfield, direction) =>
     tetromino,
     playfield
   );
+const merge = (tetromino, playfield) =>
+  playfield.map((row, y) =>
+    row.map(
+      (occupied, x) =>
+        occupied || tetromino.shape[y - tetromino.top]?.[x - tetromino.left]
+    )
+  );
+
+export const lock = (tetromino, playfield) => {
+  const locked = landed(tetromino, playfield);
+  return {
+    playfield: locked ? merge(tetromino, playfield) : playfield,
+    locked
+  };
+};
