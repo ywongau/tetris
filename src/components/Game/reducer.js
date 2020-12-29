@@ -71,7 +71,7 @@ const visitors = {
         clearResult.linesCleared > 0
           ? 'clear' + clearResult.linesCleared
           : undefined,
-      interval: Math.max(100, 1000 - Math.floor(lines / 10) * 50),
+      interval: Math.max(100, 1000 - Math.floor(lines / 10) * 100),
       phase: phases.spawning
     };
   },

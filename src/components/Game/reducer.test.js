@@ -182,6 +182,54 @@ describe('reducer', () => {
       lines: 1
     });
   });
+  it('decreases interval after every 10 lines', () => {
+    const playfield = [...Array(20)].map((_, y) =>
+      [...Array(10)].map(() => (y === 19 ? 'I' : undefined))
+    );
+    const result = reducer(
+      {
+        ...initialState,
+        tetromino: undefined,
+        playfield,
+        phase: phases.clearing,
+        lines: 9
+      },
+      { type: 'clear' }
+    );
+    expect(result).to.deep.equal({
+      ...initialState,
+      playfield: initialState.playfield,
+      phase: phases.spawning,
+      tetromino: undefined,
+      sfx: 'clear1',
+      lines: 10,
+      interval: 900
+    });
+  });
+  it('increase limites minimum interval to 100', () => {
+    const playfield = [...Array(20)].map((_, y) =>
+      [...Array(10)].map(() => (y === 19 ? 'I' : undefined))
+    );
+    const result = reducer(
+      {
+        ...initialState,
+        tetromino: undefined,
+        playfield,
+        phase: phases.clearing,
+        lines: 99
+      },
+      { type: 'clear' }
+    );
+    expect(result).to.deep.equal({
+      ...initialState,
+      playfield: initialState.playfield,
+      phase: phases.spawning,
+      tetromino: undefined,
+      sfx: 'clear1',
+      lines: 100,
+      interval: 100
+    });
+  });
   it('rotates right', () => {
     const result = reducer(initialState, {
       type: 'rotateRight'
