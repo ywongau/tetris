@@ -93,9 +93,9 @@ export const lock = (tetromino, playfield) => {
   };
 };
 
-export const ghostPiece = (tetromino, playfield, top = tetromino.top) => {
+export const hardDrop = (tetromino, playfield, top = tetromino.top) => {
   const result = { ...tetromino, top };
   return landed(result, playfield)
     ? result
-    : ghostPiece(tetromino, playfield, top + 1);
+    : hardDrop(tetromino, playfield, top + 1);
 };

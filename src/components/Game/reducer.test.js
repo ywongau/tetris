@@ -1,7 +1,7 @@
 import { I, J, L, O, S, T, Z } from '../../engine/tetrominoes';
 import {
   directions,
-  ghostPiece,
+  hardDrop,
   lock,
   rotateLeft,
   rotateRight
@@ -28,7 +28,7 @@ describe('reducer', () => {
     });
     expect(result.tetromino).to.deep.equal({ ...I, left: I.left - 1 });
     expect(result.ghostPiece).to.deep.equal(
-      ghostPiece(result.tetromino, result.playfield)
+      hardDrop(result.tetromino, result.playfield)
     );
   });
   it('moves right', () => {
@@ -38,7 +38,7 @@ describe('reducer', () => {
     });
     expect(result.tetromino).to.deep.equal({ ...I, left: I.left + 1 });
     expect(result.ghostPiece).to.deep.equal(
-      ghostPiece(result.tetromino, result.playfield)
+      hardDrop(result.tetromino, result.playfield)
     );
   });
   it('ticks', () => {
@@ -195,7 +195,7 @@ describe('reducer', () => {
       rotateRight(I, initialState.playfield)
     );
     expect(result.ghostPiece).to.deep.equal(
-      ghostPiece(result.tetromino, result.playfield)
+      hardDrop(result.tetromino, result.playfield)
     );
   });
   it('rotates left', () => {
@@ -206,7 +206,7 @@ describe('reducer', () => {
       rotateLeft(I, initialState.playfield)
     );
     expect(result.ghostPiece).to.deep.equal(
-      ghostPiece(result.tetromino, result.playfield)
+      hardDrop(result.tetromino, result.playfield)
     );
   });
   it('spawns a tetrimino from the queue', () => {

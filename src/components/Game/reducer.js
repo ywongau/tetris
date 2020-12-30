@@ -1,7 +1,7 @@
 import { alive, landed } from '../../engine/checks';
 import {
   directions,
-  ghostPiece,
+  hardDrop,
   lock,
   move,
   rotateLeft,
@@ -56,7 +56,7 @@ const visitors = {
       : {
           ...state,
           tetromino: updatedTetromino,
-          ghostPiece: ghostPiece(updatedTetromino, playfield),
+          ghostPiece: hardDrop(updatedTetromino, playfield),
           phase: landed(updatedTetromino, playfield)
             ? phases.locking
             : phases.descending
@@ -85,7 +85,7 @@ const visitors = {
     return {
       ...state,
       tetromino: rotateRight(tetromino, playfield),
-      ghostPiece: ghostPiece(updatedTetromino, playfield)
+      ghostPiece: hardDrop(updatedTetromino, playfield)
     };
   },
   rotateLeft: (state) => {
@@ -94,7 +94,7 @@ const visitors = {
     return {
       ...state,
       tetromino: updatedTetromino,
-      ghostPiece: ghostPiece(updatedTetromino, playfield)
+      ghostPiece: hardDrop(updatedTetromino, playfield)
     };
   },
   spawn: (state, action) => {
@@ -105,7 +105,7 @@ const visitors = {
     return {
       ...state,
       tetromino: newTetromino,
-      ghostPiece: ghostPiece(newTetromino, playfield),
+      ghostPiece: hardDrop(newTetromino, playfield),
       phase: isAlive ? phases.descending : phases.gameOver,
       sfx: isAlive ? 'spawn' : 'gameOver',
       queue: newQueue,
@@ -114,7 +114,7 @@ const visitors = {
   },
   hardDrop: (state) => {
     const { tetromino, playfield } = state;
-    const updatedTetromino = ghostPiece(tetromino, playfield);
+    const updatedTetromino = hardDrop(tetromino, playfield);
     return {
       ...state,
       tetromino: updatedTetromino,

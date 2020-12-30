@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import { directions, ghostPiece } from '../../engine/actions';
+import { directions, hardDrop } from '../../engine/actions';
 import { phases, reducer } from './reducer';
 import { useEffect, useReducer } from 'react';
 
@@ -24,7 +24,7 @@ export const UseGameReducer = (audio, randomizer) => () => {
     score: 0,
     lines: 0,
     interval: 1000,
-    ghostPiece: ghostPiece(tetromino, playfield)
+    ghostPiece: hardDrop(tetromino, playfield)
   });
   useEffect(() => {
     const handle =

@@ -1,6 +1,6 @@
 import {
   directions,
-  ghostPiece,
+  hardDrop,
   lock,
   move,
   rotateLeft,
@@ -535,7 +535,7 @@ describe('ghost piece', () => {
         [o, o]
       ]
     };
-    const result = ghostPiece(tetromino, playfield);
+    const result = hardDrop(tetromino, playfield);
     expect(result).to.deep.equal({
       left: 2,
       top: 2,
