@@ -2,6 +2,9 @@ import React from 'react';
 
 const Game = (customHook) => () => {
   const { state } = customHook();
+  const getTetrominoBlock = (tetromino, x, y) =>
+    tetromino?.shape?.[y - tetromino?.top]?.[x - tetromino?.left];
+
   return (
     <>
       <div className="frame">
@@ -20,9 +23,10 @@ const Game = (customHook) => () => {
                 <div
                   key={x}
                   className={
-                    state.tetromino?.shape?.[y - state.tetromino.top]?.[
-                      x - state.tetromino.left
-                    ] ||
+                    getTetrominoBlock(state.tetromino, x, y) ||
+                    (getTetrominoBlock(state.ghostPiece, x, y)
+                      ? 'ghost-piece'
+                      : '') ||
                     block ||
                     ''
                   }

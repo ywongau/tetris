@@ -1,18 +1,8 @@
-import { I, J, L, O, S, T, Z } from '../../engine/tetrominoes';
 import { act, renderHook } from '@testing-library/react-hooks';
-import {
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  waitFor
-} from '@testing-library/react';
-import { directions, rotateLeft, rotateRight } from '../../engine/actions';
-import { phases, reducer } from './reducer';
 
 import { Audio } from '../../sfx/audio';
+import { I } from '../../engine/tetrominoes';
 import { expect } from 'chai';
-import { lock } from '../../engine/checks';
 import sinon from 'sinon';
 
 const { UseGameReducer } = require('./useGameReducer');

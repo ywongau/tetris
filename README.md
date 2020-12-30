@@ -6,10 +6,6 @@ In the project directory, you can run:
 
 Launches the test runner in the interactive watch mode.
 
-### `yarn test`
-
-Run tests
-
 ### `yarn start`
 
 Run the web app

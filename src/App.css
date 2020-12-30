@@ -76,6 +76,10 @@ body {
   border-width: 1px;
   border-radius: 1px;
 }
+.next-tetromino:nth-child(2) div,
+.next-tetromino:nth-child(3) div {
+  opacity: 0.5;
+}
 
 .row .I,
 .row .O,
@@ -138,7 +142,12 @@ body {
   border-right-color: hsl(30, 100%, 35%);
   border-bottom-color: hsl(30, 100%, 30%);
 }
-
+.row .ghost-piece {
+  width: calc(1rem + 1px);
+  height: calc(1rem + 1px);
+  margin: -1px 0 0 -1px;
+  border: dashed 1px rgba(255, 255, 255);
+}
 h1 {
   font-size: 0.5rem;
   text-align: center;

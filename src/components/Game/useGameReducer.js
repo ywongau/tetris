@@ -1,9 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
+import { directions, ghostPiece } from '../../engine/actions';
 import { phases, reducer } from './reducer';
 import { useEffect, useReducer } from 'react';
-
-import { directions } from '../../engine/actions';
 
 const keyMappings = {
   ArrowLeft: directions.left,
@@ -13,15 +12,19 @@ const keyMappings = {
 export const UseGameReducer = (audio, randomizer) => () => {
   const queue = randomizer();
   const tetromino = queue[0];
+  const playfield = [...Array(20)].map(() =>
+    [...Array(10)].map(() => undefined)
+  );
   const [state, dispatch] = useReducer(reducer, {
-    playfield: [...Array(20)].map(() => [...Array(10)].map(() => undefined)),
+    playfield,
     queue: queue.slice(1),
     phase: phases.descending,
     tetromino,
     alive: true,
     score: 0,
     lines: 0,
-    interval: 1000
+    interval: 1000,
+    ghostPiece: ghostPiece(tetromino, playfield)
   });
   useEffect(() => {
     const handle = state.alive
@@ -46,9 +49,13 @@ export const UseGameReducer = (audio, randomizer) => () => {
           500
         ),
       [phases.locking]: () =>
-        setTimeout(() => dispatch({
-          type: 'lock'
-        }), 500),
+        setTimeout(
+          () =>
+            dispatch({
+              type: 'lock'
+            }),
+          500
+        ),
       [phases.clearing]: () =>
         setTimeout(
           () =>

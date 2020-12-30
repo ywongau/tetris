@@ -1,6 +1,7 @@
 import { I, J, L, O, S, T, Z } from '../../engine/tetrominoes';
 import {
   directions,
+  ghostPiece,
   lock,
   rotateLeft,
   rotateRight
@@ -25,39 +26,26 @@ describe('reducer', () => {
       type: 'move',
       payload: directions.left
     });
-    expect(result).to.deep.equal({
-      ...initialState,
-      tetromino: { ...I, left: I.left - 1 }
-    });
+    expect(result.tetromino).to.deep.equal({ ...I, left: I.left - 1 });
+    expect(result.ghostPiece).to.deep.equal(
+      ghostPiece(result.tetromino, result.playfield)
+    );
   });
   it('moves right', () => {
     const result = reducer(initialState, {
       type: 'move',
       payload: directions.right
     });
-    expect(result).to.deep.equal({
-      ...initialState,
-      tetromino: { ...I, left: I.left + 1 }
-    });
-  });
-  it('moves right', () => {
-    const result = reducer(initialState, {
-      type: 'move',
-      payload: directions.right
-    });
-    expect(result).to.deep.equal({
-      ...initialState,
-      tetromino: { ...I, left: I.left + 1 }
-    });
+    expect(result.tetromino).to.deep.equal({ ...I, left: I.left + 1 });
+    expect(result.ghostPiece).to.deep.equal(
+      ghostPiece(result.tetromino, result.playfield)
+    );
   });
   it('ticks', () => {
     const result = reducer(initialState, {
       type: 'tick'
     });
-    expect(result).to.deep.equal({
-      ...initialState,
-      tetromino: { ...I, top: I.top + 1 }
-    });
+    expect(result.tetromino).to.deep.equal({ ...I, top: I.top + 1 });
   });
   it('does nothing if phase is not descending', () => {
     const state = {
@@ -75,32 +63,23 @@ describe('reducer', () => {
       { ...initialState, tetromino: { ...O, top: 17 } },
       { type: 'tick' }
     );
-    expect(result).to.deep.equal({
-      ...initialState,
-      tetromino: { ...O, top: 18 },
-      phase: phases.locking
-    });
+    expect(result.tetromino).to.deep.equal({ ...O, top: 18 });
+    expect(result.phase).to.equal(phases.locking);
   });
   it('moves down', () => {
     const result = reducer(initialState, {
       type: 'move',
       payload: directions.down
     });
-    expect(result).to.deep.equal({
-      ...initialState,
-      tetromino: { ...I, top: I.top + 1 }
-    });
+    expect(result.tetromino).to.deep.equal({ ...I, top: I.top + 1 });
   });
   it('sets phase to locking when a tetromino is landed', () => {
     const result = reducer(
       { ...initialState, tetromino: { ...O, top: 17 } },
       { type: 'move', payload: directions.down }
     );
-    expect(result).to.deep.equal({
-      ...initialState,
-      tetromino: { ...O, top: 18 },
-      phase: phases.locking
-    });
+    expect(result.tetromino).to.deep.equal({ ...O, top: 18 });
+    expect(result.phase).to.equal(phases.locking);
   });
   it('locks a landed tetromino if phase is locking', () => {
     const tetromino = { ...O, top: 18 };
@@ -108,13 +87,12 @@ describe('reducer', () => {
       { ...initialState, tetromino, phase: phases.locking },
       { type: 'move', payload: directions.down }
     );
-    expect(result).to.deep.equal({
-      ...initialState,
-      playfield: lock(tetromino, initialState.playfield).playfield,
-      phase: phases.clearing,
-      sfx: 'locked',
-      tetromino: undefined
-    });
+    expect(result.playfield).to.deep.equal(
+      lock(tetromino, initialState.playfield).playfield
+    );
+    expect(result.phase).to.equal(phases.clearing);
+    expect(result.sfx).to.equal('locked');
+    expect(result.tetromino).to.equal(undefined);
   });
   it('still allows move when locking', () => {
     const tetromino = { ...O, top: 18 };
@@ -122,10 +100,10 @@ describe('reducer', () => {
       { ...initialState, tetromino, phase: phases.locking },
       { type: 'move', payload: directions.right }
     );
-    expect(result).to.deep.equal({
-      ...initialState,
-      phase: phases.locking,
-      tetromino: { ...tetromino, left: tetromino.left + 1 }
+    expect(result.phase).to.equal(phases.locking);
+    expect(result.tetromino).to.deep.equal({
+      ...tetromino,
+      left: tetromino.left + 1
     });
   });
   it('does not set locking to true before a tetromino is landed', () => {
@@ -133,11 +111,8 @@ describe('reducer', () => {
       { ...initialState, tetromino: { ...O, top: 16 } },
       { type: 'move', payload: directions.down }
     );
-    expect(result).to.deep.equal({
-      ...initialState,
-      tetromino: { ...O, top: 17 },
-      phase: phases.descending
-    });
+    expect(result.phase).to.equal(phases.descending);
+    expect(result.tetromino).to.deep.equal({ ...O, top: 17 });
   });
   it('locks the tetromino, sets phase to clearing', () => {
     const tetromino = { ...O, top: 18 };
@@ -145,13 +120,13 @@ describe('reducer', () => {
       { ...initialState, tetromino, phase: phases.locking },
       { type: 'lock' }
     );
-    expect(result).to.deep.equal({
-      ...initialState,
-      playfield: lock(tetromino, initialState.playfield).playfield,
-      tetromino: undefined,
-      sfx: 'locked',
-      phase: phases.clearing
-    });
+
+    expect(result.playfield).to.deep.equal(
+      lock(tetromino, initialState.playfield).playfield
+    );
+    expect(result.phase).to.equal(phases.clearing);
+    expect(result.sfx).to.equal('locked');
+    expect(result.tetromino).to.equal(undefined);
   });
   it('does not lock the tetromino if it has not landed', () => {
     const tetromino = { ...O, top: 17 };
@@ -159,10 +134,7 @@ describe('reducer', () => {
       { ...initialState, tetromino, phase: phases.locking },
       { type: 'lock' }
     );
-    expect(result).to.deep.equal({
-      ...initialState,
-      tetromino
-    });
+    expect(result.tetromino).to.deep.equal(tetromino);
   });
   it('clears lines and set phase to spawning', () => {
     const playfield = [...Array(20)].map((_, y) =>
@@ -177,14 +149,11 @@ describe('reducer', () => {
       },
       { type: 'clear' }
     );
-    expect(result).to.deep.equal({
-      ...initialState,
-      playfield: initialState.playfield,
-      phase: phases.spawning,
-      tetromino: undefined,
-      sfx: 'clear1',
-      lines: 1
-    });
+    expect(result.playfield).to.deep.equal(initialState.playfield);
+    expect(result.phase).to.equal(phases.spawning);
+    expect(result.sfx).to.equal('clear1');
+    expect(result.tetromino).to.equal(undefined);
+    expect(result.lines).to.equal(1);
   });
   it('decreases interval after every 10 lines', () => {
     const playfield = [...Array(20)].map((_, y) =>
@@ -200,17 +169,9 @@ describe('reducer', () => {
       },
       { type: 'clear' }
     );
-    expect(result).to.deep.equal({
-      ...initialState,
-      playfield: initialState.playfield,
-      phase: phases.spawning,
-      tetromino: undefined,
-      sfx: 'clear1',
-      lines: 10,
-      interval: 900
-    });
+    expect(result.interval).to.equal(900);
   });
-  it('increase limites minimum interval to 100', () => {
+  it('limites minimum interval to 100', () => {
     const playfield = [...Array(20)].map((_, y) =>
       [...Array(10)].map(() => (y === 19 ? 'I' : undefined))
     );
@@ -224,33 +185,29 @@ describe('reducer', () => {
       },
       { type: 'clear' }
     );
-    expect(result).to.deep.equal({
-      ...initialState,
-      playfield: initialState.playfield,
-      phase: phases.spawning,
-      tetromino: undefined,
-      sfx: 'clear1',
-      lines: 100,
-      interval: 100
-    });
+    expect(result.interval).to.equal(100);
   });
   it('rotates right', () => {
     const result = reducer(initialState, {
       type: 'rotateRight'
     });
-    expect(result).to.deep.equal({
-      ...initialState,
-      tetromino: rotateRight(I, initialState.playfield)
-    });
+    expect(result.tetromino).to.deep.equal(
+      rotateRight(I, initialState.playfield)
+    );
+    expect(result.ghostPiece).to.deep.equal(
+      ghostPiece(result.tetromino, result.playfield)
+    );
   });
   it('rotates left', () => {
     const result = reducer(initialState, {
       type: 'rotateLeft'
     });
-    expect(result).to.deep.equal({
-      ...initialState,
-      tetromino: rotateLeft(I, initialState.playfield)
-    });
+    expect(result.tetromino).to.deep.equal(
+      rotateLeft(I, initialState.playfield)
+    );
+    expect(result.ghostPiece).to.deep.equal(
+      ghostPiece(result.tetromino, result.playfield)
+    );
   });
   it('spawns a tetrimino from the queue', () => {
     const result = reducer(
@@ -259,13 +216,10 @@ describe('reducer', () => {
         type: 'spawn'
       }
     );
-    expect(result).to.deep.equal({
-      ...initialState,
-      tetromino: I,
-      sfx: 'spawn',
-      queue: initialState.queue.slice(1),
-      phase: phases.descending
-    });
+    expect(result.phase).to.equal(phases.descending);
+    expect(result.sfx).to.equal('spawn');
+    expect(result.tetromino).to.deep.equal(I);
+    expect(result.queue).to.deep.equal(initialState.queue.slice(1));
   });
   it('appends provided tetriminos into the queue', () => {
     const result = reducer(
@@ -280,12 +234,7 @@ describe('reducer', () => {
         payload: [I, O, T, S, Z, J, L]
       }
     );
-    expect(result).to.deep.equal({
-      ...initialState,
-      tetromino: I,
-      sfx: 'spawn',
-      queue: [O, S, I, O, T, S, Z, J, L]
-    });
+    expect(result.queue).to.deep.equal([O, S, I, O, T, S, Z, J, L]);
   });
   it('dies when there is no space to spawn', () => {
     const state = {
@@ -297,13 +246,8 @@ describe('reducer', () => {
     const result = reducer(state, {
       type: 'spawn'
     });
-    expect(result).to.deep.equal({
-      ...state,
-      tetromino: I,
-      queue: initialState.queue.slice(1),
-      alive: false,
-      sfx: 'gameOver',
-      phase: phases.gameOver
-    });
+    expect(result.phase).to.equal(phases.gameOver);
+    expect(result.sfx).to.equal('gameOver');
+    expect(result.alive).to.equal(false);
   });
 });

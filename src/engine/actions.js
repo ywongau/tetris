@@ -92,3 +92,10 @@ export const lock = (tetromino, playfield) => {
     locked
   };
 };
+
+export const ghostPiece = (tetromino, playfield, top = tetromino.top) => {
+  const result = { ...tetromino, top };
+  return landed(result, playfield)
+    ? result
+    : ghostPiece(tetromino, playfield, top + 1);
+};

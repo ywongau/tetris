@@ -1,4 +1,11 @@
-import { directions, hardDrop, lock, move, rotateLeft, rotateRight } from './actions';
+import {
+  directions,
+  ghostPiece,
+  lock,
+  move,
+  rotateLeft,
+  rotateRight
+} from './actions';
 
 import { expect } from 'chai';
 
@@ -509,5 +516,33 @@ describe('lock', () => {
       [_, _, _, o, _]
     ]);
     expect(result.locked).to.deep.equal(true);
+  });
+});
+describe('ghost piece', () => {
+  it('works', () => {
+    const playfield = [
+      [_, _, _, _, _],
+      [_, _, _, _, _],
+      [_, _, _, _, _],
+      [_, _, _, _, _],
+      [_, _, _, o, _]
+    ];
+    const tetromino = {
+      left: 2,
+      top: 0,
+      shape: [
+        [o, o],
+        [o, o]
+      ]
+    };
+    const result = ghostPiece(tetromino, playfield);
+    expect(result).to.deep.equal({
+      left: 2,
+      top: 2,
+      shape: [
+        [o, o],
+        [o, o]
+      ]
+    });
   });
 });

@@ -4,8 +4,6 @@ import { expect } from 'chai';
 import { randomizer } from './randomizer';
 import sinon from 'sinon';
 
-const _ = false;
-const o = true;
 // https://tetris.fandom.com/wiki/Tetris_Guideline
 describe('randomizer', () => {
   describe('forcing random to be 0.9', () => {
