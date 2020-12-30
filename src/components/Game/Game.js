@@ -3,7 +3,7 @@ import React from 'react';
 const Game = (customHook) => () => {
   const { state } = customHook();
   const getTetrominoBlock = (tetromino, x, y) =>
-    tetromino?.shape?.[y - tetromino?.top]?.[x - tetromino?.left];
+    tetromino && tetromino.shape[y - tetromino.top]?.[x - tetromino.left];
 
   return (
     <>
