@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/tetris/static/css/main.41f60f20.chunk.css",
-    "main.js": "/tetris/static/js/main.96d0ff70.chunk.js",
-    "main.js.map": "/tetris/static/js/main.96d0ff70.chunk.js.map",
+    "main.js": "/tetris/static/js/main.7bd12b30.chunk.js",
+    "main.js.map": "/tetris/static/js/main.7bd12b30.chunk.js.map",
     "runtime-main.js": "/tetris/static/js/runtime-main.a54de682.js",
     "runtime-main.js.map": "/tetris/static/js/runtime-main.a54de682.js.map",
     "static/js/2.accc4f5e.chunk.js": "/tetris/static/js/2.accc4f5e.chunk.js",
@@ -18,6 +18,7 @@
     "static/media/clear3.50cd846e.mp3": "/tetris/static/media/clear3.50cd846e.mp3",
     "static/media/clear4.529df8a4.mp3": "/tetris/static/media/clear4.529df8a4.mp3",
     "static/media/gameOver.f52cf5f0.mp3": "/tetris/static/media/gameOver.f52cf5f0.mp3",
+    "static/media/hardDrop.d2d4cb32.mp3": "/tetris/static/media/hardDrop.d2d4cb32.mp3",
     "static/media/locked.f92eb651.mp3": "/tetris/static/media/locked.f92eb651.mp3",
     "static/media/spawn.dcb5ecc2.mp3": "/tetris/static/media/spawn.dcb5ecc2.mp3"
   },
@@ -25,6 +26,6 @@
     "static/js/runtime-main.a54de682.js",
     "static/js/2.accc4f5e.chunk.js",
     "static/css/main.41f60f20.chunk.css",
-    "static/js/main.96d0ff70.chunk.js"
+    "static/js/main.7bd12b30.chunk.js"
   ]
 }
