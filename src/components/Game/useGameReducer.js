@@ -27,11 +27,12 @@ export const UseGameReducer = (audio, randomizer) => () => {
     ghostPiece: ghostPiece(tetromino, playfield)
   });
   useEffect(() => {
-    const handle = state.alive
-      ? setInterval(() => dispatch({ type: 'tick' }), state.interval)
-      : 0;
+    const handle =
+      state.alive && state.tetromino
+        ? setInterval(() => dispatch({ type: 'tick' }), state.interval)
+        : 0;
     return () => clearInterval(handle);
-  }, [state.alive, state.interval]);
+  }, [state.alive, state.tetromino, state.interval]);
   useEffect(() => {
     if (state.sfx) {
       audio[state.sfx]();
