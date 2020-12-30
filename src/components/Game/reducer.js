@@ -111,6 +111,16 @@ const visitors = {
       queue: newQueue,
       alive: isAlive
     };
+  },
+  hardDrop: (state) => {
+    const { tetromino, playfield } = state;
+    const updatedTetromino = ghostPiece(tetromino, playfield);
+    return {
+      ...state,
+      tetromino: updatedTetromino,
+      sfx: 'hardDrop',
+      phase: phases.locking
+    };
   }
 };
 const validPhases = {
@@ -120,7 +130,8 @@ const validPhases = {
   clear: [phases.clearing],
   rotateLeft: [phases.descending, phases.locking],
   rotateRight: [phases.descending, phases.locking],
-  spawn: [phases.spawning]
+  spawn: [phases.spawning],
+  hardDrop: [phases.descending]
 };
 export const reducer = (state, action) =>
   validPhases[action.type]?.includes(state.phase)

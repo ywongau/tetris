@@ -75,6 +75,9 @@ export const UseGameReducer = (audio, randomizer) => () => {
       if (e.key === 'ArrowUp') {
         dispatch({ type: 'rotateRight' });
       }
+      if (e.key === ' ') {
+        dispatch({ type: 'hardDrop' });
+      }
     };
     if (state.alive) {
       document.body.addEventListener('keydown', onKeydown);

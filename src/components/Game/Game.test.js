@@ -146,10 +146,10 @@ describe('Game', () => {
       await tick(500, 1);
       //spawns after 500ms
       await tick(500, 1);
-      // expect(cells[0][4].className).to.equal('O');
-      // expect(cells[1][4].className).to.equal('O');
-      // expect(cells[1][5].className).to.equal('O');
-      // expect(cells[1][5].className).to.equal('O');
+      expect(cells[0][4].className).to.equal('O');
+      expect(cells[1][4].className).to.equal('O');
+      expect(cells[1][5].className).to.equal('O');
+      expect(cells[1][5].className).to.equal('O');
     });
 
     it('moves', async () => {
@@ -185,6 +185,13 @@ describe('Game', () => {
       expect(cells[2][5].className).to.equal('I');
       expect(cells[3][5].className).to.equal('I');
       expect(cells[4][5].className).to.equal('I');
+      fireEvent.keyDown(document.body, {
+        key: ' '
+      });
+      expect(cells[16][5].className).to.equal('I');
+      expect(cells[17][5].className).to.equal('I');
+      expect(cells[18][5].className).to.equal('I');
+      expect(cells[19][5].className).to.equal('I');
     });
   });
 });

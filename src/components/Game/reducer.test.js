@@ -250,4 +250,15 @@ describe('reducer', () => {
     expect(result.sfx).to.equal('gameOver');
     expect(result.alive).to.equal(false);
   });
+  it('hard drops', () => {
+    const result = reducer(initialState, {
+      type: 'hardDrop'
+    });
+    expect(result.phase).to.equal(phases.locking);
+    expect(result.tetromino).to.deep.equal({
+      ...initialState.tetromino,
+      top: 18
+    });
+    expect(result.sfx).to.equal('hardDrop');
+  });
 });
