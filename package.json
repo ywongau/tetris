@@ -23,6 +23,7 @@
     "@types/sinon": "^9.0.8",
     "chai": "^4.2.0",
     "cross-env": "^7.0.2",
+    "gh-pages": "^3.1.0",
     "ignore-styles": "^5.0.1",
     "jsdom": "^16.4.0",
     "live-server": "^1.2.1",

@@ -1,6 +1,7 @@
 import { I, J, L, O, S, T, Z } from '../../engine/tetrominoes';
 import {
   cleanup,
+  findByTitle,
   fireEvent,
   render,
   screen,
@@ -130,6 +131,19 @@ describe('Game', () => {
       await tick(1000);
       await tick(1000);
     };
+
+    it('counts down', async () => {
+      renderGame();
+      const button = screen.getByText('PLAY');
+      fireEvent.click(button);
+      screen.getByText('3');
+      await tick(1000, 1);
+      screen.getByText('2');
+      await tick(1000, 1);
+      screen.getByText('1');
+      await tick(1000, 1);
+      expect(screen.queryByText('PLAY')).to.equal(null);
+    });
     it('falls down and gets a new tetromino', async () => {
       renderGame();
       await play();
