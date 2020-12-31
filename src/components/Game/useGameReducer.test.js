@@ -43,12 +43,21 @@ describe('hooks', () => {
     tick(500);
   };
 
+  const play = (start) => {
+    start();
+    tick(1000);
+    tick(1000);
+    tick(1000);
+    tick(1000);
+  };
+
   it('appends a new queue when there are 3 items in queue', async () => {
     const hook = UseGameReducer(
       Audio(() => _fakeAudioContext),
       fakeRandomizer
     );
     const { result } = renderHook(() => hook());
+    play(result.current.start);
     softDrop(18);
     softDrop(17);
     expect(result.current.state.queue).to.deep.equal([I, I, I, I, I, I, I]);
@@ -59,6 +68,7 @@ describe('hooks', () => {
       fakeRandomizer
     );
     const { result } = renderHook(() => hook());
+    play(result.current.start);
     for (let i = 18; i >= 1; i--) {
       softDrop(i);
     }

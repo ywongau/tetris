@@ -122,8 +122,17 @@ describe('Game', () => {
           }),
         Promise.resolve()
       );
+
+    const play = async () => {
+      const button = screen.getByText('PLAY');
+      fireEvent.click(button);
+      await tick(1000);
+      await tick(1000);
+      await tick(1000);
+    };
     it('falls down and gets a new tetromino', async () => {
       renderGame();
+      await play();
       const playfield = screen.getByTestId('playfield');
       const cells = [...playfield.childNodes].map((row) => [...row.childNodes]);
       expect(cells[1][3].className).to.equal('I');
@@ -154,6 +163,7 @@ describe('Game', () => {
 
     it('moves', async () => {
       renderGame();
+      await play();
       const playfield = screen.getByTestId('playfield');
       const cells = [...playfield.childNodes].map((row) => [...row.childNodes]);
       fireEvent.keyDown(document.body, {

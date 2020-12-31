@@ -1,0 +1,192 @@
+* {
+  box-sizing: border-box;
+}
+html {
+  font-size: 4vh;
+  background-color: #404040;
+  color: #fff;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  background-image: url('img/background.webp');
+  background-size: cover;
+}
+#root {
+  display: flex;
+  justify-content: center;
+  padding-top: 2rem;
+  height: auto;
+}
+$frame-base-color: rgba(64, 64, 64, 0.9);
+$background-color: rgba(24, 24, 24, 0.5);
+.frame {
+  border-width: 2px;
+  border-style: solid;
+  padding: 0.5rem;
+  background: $frame-base-color;
+  border-top-color: lighten($frame-base-color, 10%);
+  border-left-color: lighten($frame-base-color, 5%);
+  border-right-color: darken($frame-base-color, 5%);
+  border-bottom-color: darken($frame-base-color, 10%);
+  background-clip: padding-box;
+}
+.frame {
+  > .playfield,
+  .next-tetrominoes,
+  .lines {
+    border-bottom-color: lighten($frame-base-color, 10%);
+    border-right-color: lighten($frame-base-color, 5%);
+    border-left-color: darken($frame-base-color, 5%);
+    border-top-color: darken($frame-base-color, 10%);
+    border-width: 2px;
+    border-style: solid;
+    background-clip: padding-box;
+  }
+}
+main {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  .playfield {
+    background-color: $background-color;
+    width: min-content;
+    margin: auto;
+    grid-row: 1/2;
+    grid-column: 1/2;
+  }
+  .controls,
+  .countdown {
+    grid-row: 1/2;
+    grid-column: 1/2;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    font-size: 1.5rem;
+  }
+  .controls button {
+    padding: 0.5rem 1rem;
+    font-size: 1.5rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    &:focus {
+      outline: none;
+    }
+  }
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+.row {
+  display: flex;
+  width: min-content;
+  margin: auto;
+  .I,
+  .O,
+  .Z,
+  .T,
+  .S,
+  .L,
+  .J {
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 2px;
+  }
+  div.I {
+    background: hsl(180, 100%, 25%);
+    border-top-color: hsl(180, 100%, 35%);
+    border-left-color: hsl(180, 100%, 30%);
+    border-right-color: hsl(180, 100%, 20%);
+    border-bottom-color: hsl(180, 100%, 15%);
+  }
+  div.O {
+    background: hsl(51, 100%, 40%);
+    border-top-color: hsl(51, 100%, 50%);
+    border-left-color: hsl(51, 100%, 45%);
+    border-right-color: hsl(51, 100%, 35%);
+    border-bottom-color: hsl(51, 100%, 30%);
+  }
+  div.T {
+    background: hsl(300, 100%, 25%);
+    border-top-color: hsl(300, 100%, 35%);
+    border-left-color: hsl(300, 100%, 30%);
+    border-right-color: hsl(300, 100%, 20%);
+    border-bottom-color: hsl(300, 100%, 15%);
+  }
+  div.S {
+    background: hsl(120, 100%, 25%);
+    border-top-color: hsl(120, 100%, 35%);
+    border-left-color: hsl(120, 100%, 30%);
+    border-right-color: hsl(120, 100%, 20%);
+    border-bottom-color: hsl(120, 100%, 15%);
+  }
+  div.Z {
+    background: hsl(0, 100%, 40%);
+    border-top-color: hsl(0, 100%, 50%);
+    border-left-color: hsl(0, 100%, 45%);
+    border-right-color: hsl(0, 100%, 35%);
+    border-bottom-color: hsl(0, 100%, 30%);
+  }
+  div.J {
+    background: hsl(230, 100%, 40%);
+    border-top-color: hsl(230, 100%, 50%);
+    border-left-color: hsl(230, 100%, 45%);
+    border-right-color: hsl(230, 100%, 35%);
+    border-bottom-color: hsl(230, 100%, 30%);
+  }
+  div.L {
+    background: hsl(30, 100%, 40%);
+    border-top-color: hsl(30, 100%, 50%);
+    border-left-color: hsl(30, 100%, 45%);
+    border-right-color: hsl(30, 100%, 35%);
+    border-bottom-color: hsl(30, 100%, 30%);
+  }
+  .ghost-piece {
+    width: calc(1rem - 2px);
+    height: calc(1rem - 2px);
+    margin: 1px;
+    border: dashed 1px #fff;
+  }
+}
+.row.clearing div {
+  animation: blink 0.125s linear infinite;
+}
+.row div {
+  width: 1rem;
+  height: 1rem;
+}
+.next-tetrominoes {
+  width: calc(3rem + 4px);
+  height: calc(6rem + 4px);
+}
+.next-tetromino {
+  padding: 0.5rem;
+  height: 2rem;
+  width: 3rem;
+  .row div {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-width: 1px;
+    border-radius: 1px;
+  }
+  &:nth-child(2) div,
+  &:nth-child(3) div {
+    opacity: 0.5;
+  }
+}
+
+h1 {
+  font-size: 0.5rem;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+.lines {
+  text-align: right;
+  font-size: 0.5rem;
+  padding: 4px;
+}

@@ -15,7 +15,9 @@ export const phases = {
   descending: 'descending',
   locking: 'locking',
   clearing: 'clearing',
-  gameOver: 'gameOver'
+  gameOver: 'gameOver',
+  starting: 'starting',
+  pending: undefined
 };
 
 const doLock = (state) => {
@@ -121,7 +123,21 @@ const visitors = {
       sfx: 'hardDrop',
       phase: phases.locking
     };
-  }
+  },
+  start: (state, action) => ({
+    playfield: [...Array(20)].map(() => [...Array(10)].map(() => undefined)),
+    queue: action.payload,
+    phase: phases.starting,
+    tetromino: undefined,
+    alive: true,
+    interval: 1000,
+    lines: 0,
+    countdown: 3
+  }),
+  countdown: (state) => ({
+    ...state,
+    countdown: Math.max(0, state.countdown - 1)
+  })
 };
 const validPhases = {
   tick: [phases.descending],
@@ -130,10 +146,23 @@ const validPhases = {
   clear: [phases.clearing],
   rotateLeft: [phases.descending, phases.locking],
   rotateRight: [phases.descending, phases.locking],
-  spawn: [phases.spawning],
-  hardDrop: [phases.descending]
+  spawn: [phases.spawning, phases.starting],
+  hardDrop: [phases.descending],
+  start: [phases.pending, phases.gameOver],
+  countdown: [phases.starting]
 };
 export const reducer = (state, action) =>
   validPhases[action.type]?.includes(state.phase)
     ? visitors[action.type](state, action)
     : state;
+
+export const initialState = {
+  playfield: [...Array(20)].map(() => [...Array(10)].map(() => undefined)),
+  queue: [],
+  phase: phases.pending,
+  tetromino: undefined,
+  alive: false,
+  interval: 1000,
+  lines: 0,
+  countdown: 0
+};

@@ -1,13 +1,13 @@
 import React from 'react';
+import { phases } from './reducer';
 
 const Game = (customHook) => () => {
-  const { state } = customHook();
+  const { state, start } = customHook();
   const getTetrominoBlock = (tetromino, x, y) =>
     tetromino && tetromino.shape[y - tetromino.top]?.[x - tetromino.left];
-
   return (
     <>
-      <div className="frame">
+      <main className="frame">
         <div data-testid="playfield" className="playfield">
           {state.playfield.map((row, y) => (
             <div
@@ -35,7 +35,15 @@ const Game = (customHook) => () => {
             </div>
           ))}
         </div>
-      </div>
+        {state.phase === phases.pending || state.phase === phases.gameOver ? (
+          <div className="controls">
+            <button onClick={start}>PLAY</button>
+          </div>
+        ) : null}
+        {state.countdown > 0 ? (
+          <div className="countdown">{state.countdown}</div>
+        ) : null}
+      </main>
       <div className="frame">
         <h1>NEXT</h1>
         <div className="next-tetrominoes">

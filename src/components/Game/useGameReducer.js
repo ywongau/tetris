@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { directions, hardDrop } from '../../engine/actions';
-import { phases, reducer } from './reducer';
+import { initialState, phases, reducer } from './reducer';
 import { useEffect, useReducer } from 'react';
 
 const keyMappings = {
@@ -10,29 +10,15 @@ const keyMappings = {
   ArrowDown: directions.down
 };
 export const UseGameReducer = (audio, randomizer) => () => {
-  const queue = randomizer();
-  const tetromino = queue[0];
-  const playfield = [...Array(20)].map(() =>
-    [...Array(10)].map(() => undefined)
-  );
-  const [state, dispatch] = useReducer(reducer, {
-    playfield,
-    queue: queue.slice(1),
-    phase: phases.descending,
-    tetromino,
-    alive: true,
-    score: 0,
-    lines: 0,
-    interval: 1000,
-    ghostPiece: hardDrop(tetromino, playfield)
-  });
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const hasTetromino = state.tetromino !== undefined;
   useEffect(() => {
     const handle =
-      state.alive && state.tetromino
+      state.alive && hasTetromino
         ? setInterval(() => dispatch({ type: 'tick' }), state.interval)
         : 0;
     return () => clearInterval(handle);
-  }, [state.alive, state.tetromino, state.interval]);
+  }, [state.alive, hasTetromino, state.interval]);
   useEffect(() => {
     if (state.sfx) {
       audio[state.sfx]();
@@ -64,10 +50,26 @@ export const UseGameReducer = (audio, randomizer) => () => {
               type: 'clear'
             }),
           500
-        )
+        ),
+      [phases.starting]: () => {
+        if (state.countdown > 0) {
+          setTimeout(
+            () =>
+              dispatch({
+                type: 'countdown'
+              }),
+            1000
+          );
+        } else {
+          dispatch({
+            type: 'spawn',
+            payload: randomizer()
+          });
+        }
+      }
     };
     phaseVisitors[state.phase]?.();
-  }, [state.phase, state.queue.length]);
+  }, [state.phase, state.queue.length, state.countdown]);
   useEffect(() => {
     const onKeydown = (e) => {
       if (keyMappings[e.key]) {
@@ -85,7 +87,10 @@ export const UseGameReducer = (audio, randomizer) => () => {
     }
     return () => document.body.removeEventListener('keydown', onKeydown);
   }, [state.alive]);
+
+  const start = () => dispatch({ type: 'start', payload: randomizer() });
   return {
-    state
+    state,
+    start
   };
 };

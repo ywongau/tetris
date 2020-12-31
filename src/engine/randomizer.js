@@ -12,6 +12,4 @@ const shuffle = (xs) => {
   }
   return result;
 };
-const tetrominoes = [I, O, T, S, Z, J, L];
-
-export const randomizer = () => shuffle(tetrominoes);
+export const randomizer = () => shuffle([I, O, T, S, Z, J, L]);
