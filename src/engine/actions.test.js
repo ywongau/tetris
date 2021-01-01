@@ -1,13 +1,6 @@
-import {
-  directions,
-  hardDrop,
-  lock,
-  move,
-  rotateLeft,
-  rotateRight
-} from './actions';
-
 import { expect } from 'chai';
+import { hardDrop, lock, move, rotateLeft, rotateRight } from './actions';
+import { directions } from '../constants/directions';
 
 const _ = undefined;
 const o = 'I';

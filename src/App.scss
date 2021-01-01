@@ -35,7 +35,7 @@ $background-color: rgba(24, 24, 24, 0.5);
 }
 .frame {
   > .playfield,
-  .next-tetrominoes,
+  .next-tetrominos,
   .lines {
     border-bottom-color: lighten($frame-base-color, 10%);
     border-right-color: lighten($frame-base-color, 5%);
@@ -159,7 +159,7 @@ main {
   width: 1rem;
   height: 1rem;
 }
-.next-tetrominoes {
+.next-tetrominos {
   width: calc(3rem + 4px);
   height: calc(6rem + 4px);
 }

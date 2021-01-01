@@ -1,4 +1,4 @@
-import { I, J, L, O, S, T, Z } from '../../engine/tetrominoes';
+import { I, J, L, O, S, T, Z } from '../../constants/tetrominos';
 import {
   cleanup,
   findByTitle,
@@ -12,8 +12,8 @@ import { Audio } from '../../sfx/audio';
 import GameFactory from './Game';
 import React from 'react';
 import { expect } from 'chai';
-import { phases } from './reducer';
 import sinon from 'sinon';
+import { phases } from '../../constants/phases';
 
 const { UseGameReducer } = require('./useGameReducer');
 describe('Game', () => {
@@ -54,9 +54,9 @@ describe('Game', () => {
       screen.getByText('NEXT');
       screen.getByText('LINES');
       screen.getByText('3');
-      const nextTetrominoes = container.querySelectorAll('.next-tetromino');
+      const nextTetrominos = container.querySelectorAll('.next-tetromino');
       const getNextTetromino = (n) =>
-        [...nextTetrominoes[n].querySelectorAll('.row')].map((row) =>
+        [...nextTetrominos[n].querySelectorAll('.row')].map((row) =>
           [...row.querySelectorAll('div')].map((cell) => cell.className)
         );
       expect(getNextTetromino(0)).to.deep.equal([

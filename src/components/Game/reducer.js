@@ -1,6 +1,7 @@
+import { directions } from '../../constants/directions';
+import { phases } from '../../constants/phases';
 import { alive, landed } from '../../engine/checks';
 import {
-  directions,
   hardDrop,
   lock,
   move,
@@ -9,18 +10,6 @@ import {
 } from '../../engine/actions';
 
 import { clearLines } from '../../engine/clearLines';
-
-export const phases = {
-  spawning: 'spawning',
-  descending: 'descending',
-  locking: 'locking',
-  clearing: 'clearing',
-  gameOver: 'gameOver',
-  starting: 'starting',
-  pending: 'pending',
-  paused: 'paused',
-  resuming: 'resuming'
-};
 
 const doLock = (state) => {
   const { tetromino, playfield } = state;

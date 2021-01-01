@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import { directions } from '../../engine/actions';
-import { initialState, phases, reducer } from './reducer';
+import { directions } from '../../constants/directions';
+import { phases } from '../../constants/phases';
+import { initialState, reducer } from './reducer';
 import { useEffect, useReducer } from 'react';
 
 const keyActionMappings = {

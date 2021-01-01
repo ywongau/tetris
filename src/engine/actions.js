@@ -1,4 +1,5 @@
 import { landed } from './checks';
+import { directionOffset } from '../constants/directions';
 const isPositionValid = (tetromino, playfield) => {
   const width = playfield[0].length;
   const height = playfield.length;
@@ -45,27 +46,6 @@ export const rotateRight = (tetromino, playfield) =>
     tetromino,
     playfield
   );
-
-export const directions = {
-  left: 37,
-  right: 39,
-  down: 40
-};
-
-const directionOffset = {
-  [directions.left]: {
-    left: -1,
-    top: 0
-  },
-  [directions.right]: {
-    left: 1,
-    top: 0
-  },
-  [directions.down]: {
-    left: 0,
-    top: 1
-  }
-};
 
 export const move = (tetromino, playfield, direction) =>
   returnOriginalIfInvalid(

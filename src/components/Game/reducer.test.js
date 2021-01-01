@@ -1,12 +1,8 @@
-import { I, J, L, O, S, T, Z } from '../../engine/tetrominoes';
-import {
-  directions,
-  hardDrop,
-  lock,
-  rotateLeft,
-  rotateRight
-} from '../../engine/actions';
-import { phases, reducer } from './reducer';
+import { I, J, L, O, S, T, Z } from '../../constants/tetrominos';
+import { hardDrop, lock, rotateLeft, rotateRight } from '../../engine/actions';
+import { reducer } from './reducer';
+import { phases } from '../../constants/phases';
+import { directions } from '../../constants/directions';
 
 import { expect } from 'chai';
 import sinon from 'sinon';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { phases } from './reducer';
+import { phases } from '../../constants/phases';
 
 const Game = (customHook) => () => {
   const { state, start, resume } = customHook();
@@ -52,7 +52,7 @@ const Game = (customHook) => () => {
       </main>
       <div className="frame">
         <h1>NEXT</h1>
-        <div className="next-tetrominoes">
+        <div className="next-tetrominos">
           {state.queue.slice(0, 3).map((tetromino, i) => (
             <div className="next-tetromino" key={i}>
               {tetromino.shape.map((row, y) => (

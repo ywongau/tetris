@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react-hooks';
 
 import { Audio } from '../../sfx/audio';
-import { I } from '../../engine/tetrominoes';
+import { I } from '../../constants/tetrominos';
 import { expect } from 'chai';
 import sinon from 'sinon';
 
