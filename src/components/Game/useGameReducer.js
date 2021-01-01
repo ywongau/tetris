@@ -1,13 +1,17 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import { directions, hardDrop } from '../../engine/actions';
+import { directions } from '../../engine/actions';
 import { initialState, phases, reducer } from './reducer';
 import { useEffect, useReducer } from 'react';
 
-const keyMappings = {
-  ArrowLeft: directions.left,
-  ArrowRight: directions.right,
-  ArrowDown: directions.down
+const keyActionMappings = {
+  ArrowLeft: { type: 'move', payload: directions.left },
+  ArrowRight: { type: 'move', payload: directions.right },
+  ArrowDown: { type: 'move', payload: directions.down },
+  ArrowUp: { type: 'rotateRight' },
+  ' ': { type: 'hardDrop' },
+  Escape: { type: 'pause' },
+  z: { type: 'rotateLeft' }
 };
 export const UseGameReducer = (audio, randomizer) => () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -90,20 +94,8 @@ export const UseGameReducer = (audio, randomizer) => () => {
   }, [state.phase, state.queue.length, state.countdown]);
   useEffect(() => {
     const onKeydown = (e) => {
-      if (keyMappings[e.key]) {
-        dispatch({ type: 'move', payload: keyMappings[e.key] });
-      }
-      if (e.key === 'ArrowUp') {
-        dispatch({ type: 'rotateRight' });
-      }
-      if (e.key === ' ') {
-        dispatch({ type: 'hardDrop' });
-      }
-      if (e.key === 'Escape') {
-        dispatch({ type: 'pause' });
-      }
-      if (e.key === 'z') {
-        dispatch({ type: 'rotateLeft' });
+      if (keyActionMappings[e.key]) {
+        dispatch(keyActionMappings[e.key]);
       }
     };
     if (state.alive) {
