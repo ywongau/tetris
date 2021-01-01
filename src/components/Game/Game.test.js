@@ -124,7 +124,7 @@ describe('Game', () => {
       );
 
     const play = async () => {
-      const button = screen.getByText('PLAY');
+      const button = screen.getByText('START');
       fireEvent.click(button);
       await tick(1000);
       await tick(1000);
@@ -133,9 +133,9 @@ describe('Game', () => {
 
     it('counts down when play and resume are clicked', async () => {
       renderGame();
-      const playButton = screen.getByText('PLAY');
+      const playButton = screen.getByText('START');
       fireEvent.click(playButton);
-      expect(screen.queryByText('PLAY')).to.equal(null);
+      expect(screen.queryByText('START')).to.equal(null);
       screen.getByText('3');
       await tick(1000, 1);
       screen.getByText('2');

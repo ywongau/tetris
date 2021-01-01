@@ -37,7 +37,7 @@ const Game = (customHook) => () => {
         </div>
         {state.phase === phases.pending || state.phase === phases.gameOver ? (
           <div className="controls">
-            <button onClick={start}>PLAY</button>
+            <button onClick={start}>START</button>
           </div>
         ) : null}
         {state.phase === phases.paused ? (
