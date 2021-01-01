@@ -10,7 +10,7 @@ export const landed = (tetromino, playfield) => {
   );
 };
 
-export const blockOut = (tetromino, playfield) =>
+export const blockedOut = (tetromino, playfield) =>
   tetromino.shape.some((row, y) =>
     row.some(
       (occupied, x) =>

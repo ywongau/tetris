@@ -1,4 +1,4 @@
-import { blockOut, landed } from '../../engine/checks';
+import { blockedOut, landed } from '../../engine/checks';
 import {
   hardDrop,
   lock,
@@ -96,7 +96,7 @@ const visitors = {
     const newTetromino = queue[0];
     const newQueue = queue.slice(1).concat(action.payload || []);
     const isAlive =
-      !landed(newTetromino, playfield) && !blockOut(newTetromino, playfield);
+      !landed(newTetromino, playfield) && !blockedOut(newTetromino, playfield);
     return {
       ...state,
       tetromino: newTetromino,

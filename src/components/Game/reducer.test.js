@@ -152,9 +152,10 @@ describe('reducer', () => {
     });
   });
   describe('clear', () => {
-    const playfield = [...Array(22)].map((_, y) =>
-      [...Array(10)].map(() => (y === 21 ? 'I' : undefined))
-    );
+    const playfield = [
+      ...[...Array(21)].map(() => [_, _, _, _, _, _, _, _, _, _]),
+      [o, o, o, o, o, o, o, o, o, o]
+    ];
     it('clears lines and set phase to spawning', () => {
       const result = reducer(
         {

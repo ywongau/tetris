@@ -1,7 +1,6 @@
 import { I, J, L, O, S, T, Z } from '../../constants/tetrominos';
 import {
   cleanup,
-  findByTitle,
   fireEvent,
   render,
   screen,

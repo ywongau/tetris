@@ -31,8 +31,6 @@ $background-color: rgba(24, 24, 24, 0.5);
   border-right-color: darken($frame-base-color, 5%);
   border-bottom-color: darken($frame-base-color, 10%);
   background-clip: padding-box;
-}
-.frame {
   > .playfield,
   .next-tetrominos,
   .lines {

@@ -1,5 +1,5 @@
-import { landed } from './checks';
 import { directionOffset } from '../constants/directions';
+import { landed } from './checks';
 const isPositionValid = (tetromino, playfield) => {
   const width = playfield[0].length;
   const height = playfield.length;

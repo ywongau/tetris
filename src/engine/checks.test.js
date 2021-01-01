@@ -1,5 +1,4 @@
-import { blockOut, lock } from './checks';
-
+import { blockedOut } from './checks';
 import { expect } from 'chai';
 
 const _ = undefined;
@@ -22,7 +21,7 @@ describe('checks', () => {
         [o, o]
       ]
     };
-    const result = blockOut(tetromino, playfield);
+    const result = blockedOut(tetromino, playfield);
     expect(result).to.equal(false);
   });
   it('is blocked out if the tetromino overlaps any blocks in the playfield', () => {
@@ -41,7 +40,7 @@ describe('checks', () => {
         [o, o]
       ]
     };
-    const result = blockOut(tetromino, playfield);
+    const result = blockedOut(tetromino, playfield);
     expect(result).to.equal(true);
   });
 });
