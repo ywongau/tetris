@@ -1,6 +1,4 @@
-import { directions } from '../../constants/directions';
-import { phases } from '../../constants/phases';
-import { alive, landed } from '../../engine/checks';
+import { blockOut, landed } from '../../engine/checks';
 import {
   hardDrop,
   lock,
@@ -10,7 +8,12 @@ import {
 } from '../../engine/actions';
 
 import { clearLines } from '../../engine/clearLines';
+import { directions } from '../../constants/directions';
+import { phases } from '../../constants/phases';
 
+const emptyPlayField = [...Array(22)].map(() =>
+  [...Array(10)].map(() => undefined)
+);
 const doLock = (state) => {
   const { tetromino, playfield } = state;
   const lockResult = lock(tetromino, playfield);
@@ -92,7 +95,8 @@ const visitors = {
     const { queue, playfield } = state;
     const newTetromino = queue[0];
     const newQueue = queue.slice(1).concat(action.payload || []);
-    const isAlive = alive(newTetromino, playfield);
+    const isAlive =
+      !landed(newTetromino, playfield) && !blockOut(newTetromino, playfield);
     return {
       ...state,
       tetromino: newTetromino,
@@ -114,7 +118,7 @@ const visitors = {
     };
   },
   start: (state, action) => ({
-    playfield: [...Array(20)].map(() => [...Array(10)].map(() => undefined)),
+    playfield: emptyPlayField,
     queue: action.payload,
     phase: phases.starting,
     tetromino: undefined,
@@ -165,7 +169,7 @@ export const reducer = (state, action) =>
     : state;
 
 export const initialState = {
-  playfield: [...Array(20)].map(() => [...Array(10)].map(() => undefined)),
+  playfield: emptyPlayField,
   queue: [],
   phase: phases.pending,
   tetromino: undefined,

@@ -8,7 +8,7 @@ import sinon from 'sinon';
 const { UseGameReducer } = require('./useGameReducer');
 const fakeRandomizer = () => [I, I, I, I, I];
 
-describe('hooks', () => {
+describe('useGameReducer', () => {
   let _timers;
   let _fakeBufferSource;
   let _fakeAudioContext;
@@ -58,15 +58,15 @@ describe('hooks', () => {
     const hook = UseGameReducer(Audio(FakeAudioContext), fakeRandomizer);
     const { result } = renderHook(() => hook());
     play(result.current.start);
-    softDrop(18);
-    softDrop(17);
+    softDrop(20);
+    softDrop(19);
     expect(result.current.state.queue).to.deep.equal([I, I, I, I, I, I, I]);
   });
   it('dies', async () => {
     const hook = UseGameReducer(Audio(FakeAudioContext), fakeRandomizer);
     const { result } = renderHook(() => hook());
     play(result.current.start);
-    for (let i = 18; i >= 1; i--) {
+    for (let i = 20; i >= 1; i--) {
       softDrop(i);
     }
     softDrop(0);

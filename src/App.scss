@@ -85,6 +85,18 @@ main {
   display: flex;
   width: min-content;
   margin: auto;
+  &:nth-child(2) {
+    .I,
+    .O,
+    .Z,
+    .T,
+    .S,
+    .L,
+    .J {
+      height: 0.5rem;
+      border-top: none;
+    }
+  }
   .I,
   .O,
   .Z,
@@ -145,19 +157,28 @@ main {
     border-right-color: hsl(30, 100%, 35%);
     border-bottom-color: hsl(30, 100%, 30%);
   }
+}
+.row.clearing div {
+  animation: blink 0.125s linear infinite;
+}
+.playfield .row {
+  &:nth-child(1) {
+    display: none;
+  }
+  &:nth-child(2) div {
+    height: 0.5rem;
+    border-top: none;
+  }
+  div {
+    width: 1rem;
+    height: 1rem;
+  }
   .ghost-piece {
     width: calc(1rem - 2px);
     height: calc(1rem - 2px);
     margin: 1px;
     border: dashed 1px #fff;
   }
-}
-.row.clearing div {
-  animation: blink 0.125s linear infinite;
-}
-.row div {
-  width: 1rem;
-  height: 1rem;
 }
 .next-tetrominos {
   width: calc(3rem + 4px);

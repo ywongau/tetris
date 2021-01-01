@@ -12,8 +12,8 @@ import { Audio } from '../../sfx/audio';
 import GameFactory from './Game';
 import React from 'react';
 import { expect } from 'chai';
-import sinon from 'sinon';
 import { phases } from '../../constants/phases';
+import sinon from 'sinon';
 
 const { UseGameReducer } = require('./useGameReducer');
 describe('Game', () => {
@@ -109,7 +109,7 @@ describe('Game', () => {
       renderGame();
       const playfield = screen.getByTestId('playfield');
       const rows = [...playfield.childNodes];
-      expect(rows.length).to.equal(20);
+      expect(rows.length).to.equal(22);
       expect(
         rows.every((child) => child.querySelectorAll('div').length === 10)
       ).to.equal(true);
@@ -162,6 +162,7 @@ describe('Game', () => {
       await play();
       const playfield = screen.getByTestId('playfield');
       const cells = [...playfield.childNodes].map((row) => [...row.childNodes]);
+
       expect(cells[1][3].className).to.equal('I');
       expect(cells[1][4].className).to.equal('I');
       expect(cells[1][5].className).to.equal('I');
@@ -171,11 +172,11 @@ describe('Game', () => {
       expect(cells[2][4].className).to.equal('I');
       expect(cells[2][5].className).to.equal('I');
       expect(cells[2][6].className).to.equal('I');
-      await tick(1000, 17);
-      expect(cells[19][3].className).to.equal('I');
-      expect(cells[19][4].className).to.equal('I');
-      expect(cells[19][5].className).to.equal('I');
-      expect(cells[19][6].className).to.equal('I');
+      await tick(1000, 19);
+      expect(cells[21][3].className).to.equal('I');
+      expect(cells[21][4].className).to.equal('I');
+      expect(cells[21][5].className).to.equal('I');
+      expect(cells[21][6].className).to.equal('I');
       //locks after 500ms
       await tick(500, 1);
       //clears lines after 500ms
@@ -235,10 +236,10 @@ describe('Game', () => {
       fireEvent.keyDown(document.body, {
         key: ' '
       });
-      expect(cells[19][3].className).to.equal('I');
-      expect(cells[19][4].className).to.equal('I');
-      expect(cells[19][5].className).to.equal('I');
-      expect(cells[19][6].className).to.equal('I');
+      expect(cells[21][3].className).to.equal('I');
+      expect(cells[21][4].className).to.equal('I');
+      expect(cells[21][5].className).to.equal('I');
+      expect(cells[21][6].className).to.equal('I');
     });
   });
 });

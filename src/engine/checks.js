@@ -10,9 +10,8 @@ export const landed = (tetromino, playfield) => {
   );
 };
 
-
-export const alive = (tetromino, playfield) =>
-  !tetromino.shape.some((row, y) =>
+export const blockOut = (tetromino, playfield) =>
+  tetromino.shape.some((row, y) =>
     row.some(
       (occupied, x) =>
         occupied && playfield[y + tetromino.top][x + tetromino.left]

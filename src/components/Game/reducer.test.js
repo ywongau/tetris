@@ -1,14 +1,19 @@
 import { I, J, L, O, S, T, Z } from '../../constants/tetrominos';
 import { hardDrop, lock, rotateLeft, rotateRight } from '../../engine/actions';
-import { reducer } from './reducer';
-import { phases } from '../../constants/phases';
-import { directions } from '../../constants/directions';
 
+import { directions } from '../../constants/directions';
 import { expect } from 'chai';
+import { phases } from '../../constants/phases';
+import { reducer } from './reducer';
 import sinon from 'sinon';
 
+const _ = undefined;
+const o = 'O';
+const emptyPlayField = [...Array(22)].map(() =>
+  [...Array(10)].map(() => undefined)
+);
 const initialState = {
-  playfield: [...Array(20)].map(() => [...Array(10)].map(() => undefined)),
+  playfield: emptyPlayField,
   queue: [I, J, L, O, S, T, Z],
   phase: phases.descending,
   tetromino: I,
@@ -55,14 +60,14 @@ describe('reducer', () => {
     });
     it('sets phase to locking when a tetromino is landed', () => {
       const result = reducer(
-        { ...initialState, tetromino: { ...O, top: 17 } },
+        { ...initialState, tetromino: { ...O, top: 19 } },
         { type: 'move', payload: directions.down }
       );
-      expect(result.tetromino).to.deep.equal({ ...O, top: 18 });
+      expect(result.tetromino).to.deep.equal({ ...O, top: 20 });
       expect(result.phase).to.equal(phases.locking);
     });
     it('locks a landed tetromino if phase is locking', () => {
-      const tetromino = { ...O, top: 18 };
+      const tetromino = { ...O, top: 20 };
       const result = reducer(
         { ...initialState, tetromino, phase: phases.locking },
         { type: 'move', payload: directions.down }
@@ -75,7 +80,7 @@ describe('reducer', () => {
       expect(result.tetromino).to.equal(undefined);
     });
     it('still allows move when locking', () => {
-      const tetromino = { ...O, top: 18 };
+      const tetromino = { ...O, top: 20 };
       const result = reducer(
         { ...initialState, tetromino, phase: phases.locking },
         { type: 'move', payload: directions.right }
@@ -88,11 +93,11 @@ describe('reducer', () => {
     });
     it('does not set locking to true before a tetromino is landed', () => {
       const result = reducer(
-        { ...initialState, tetromino: { ...O, top: 16 } },
+        { ...initialState, tetromino: { ...O, top: 18 } },
         { type: 'move', payload: directions.down }
       );
       expect(result.phase).to.equal(phases.descending);
-      expect(result.tetromino).to.deep.equal({ ...O, top: 17 });
+      expect(result.tetromino).to.deep.equal({ ...O, top: 19 });
     });
   });
   describe('tick', () => {
@@ -115,16 +120,16 @@ describe('reducer', () => {
     });
     it('sets phase to locking when a tetromino is landed', () => {
       const result = reducer(
-        { ...initialState, tetromino: { ...O, top: 17 } },
+        { ...initialState, tetromino: { ...O, top: 19 } },
         { type: 'tick' }
       );
-      expect(result.tetromino).to.deep.equal({ ...O, top: 18 });
+      expect(result.tetromino).to.deep.equal({ ...O, top: 20 });
       expect(result.phase).to.equal(phases.locking);
     });
   });
   describe('lock', () => {
     it('locks the tetromino, sets phase to clearing', () => {
-      const tetromino = { ...O, top: 18 };
+      const tetromino = { ...O, top: 20 };
       const result = reducer(
         { ...initialState, tetromino, phase: phases.locking },
         { type: 'lock' }
@@ -138,7 +143,7 @@ describe('reducer', () => {
       expect(result.tetromino).to.equal(undefined);
     });
     it('does not lock the tetromino if it has not landed', () => {
-      const tetromino = { ...O, top: 17 };
+      const tetromino = { ...O, top: 19 };
       const result = reducer(
         { ...initialState, tetromino, phase: phases.locking },
         { type: 'lock' }
@@ -147,10 +152,10 @@ describe('reducer', () => {
     });
   });
   describe('clear', () => {
+    const playfield = [...Array(22)].map((_, y) =>
+      [...Array(10)].map(() => (y === 21 ? 'I' : undefined))
+    );
     it('clears lines and set phase to spawning', () => {
-      const playfield = [...Array(20)].map((_, y) =>
-        [...Array(10)].map(() => (y === 19 ? 'I' : undefined))
-      );
       const result = reducer(
         {
           ...initialState,
@@ -167,9 +172,6 @@ describe('reducer', () => {
       expect(result.lines).to.equal(1);
     });
     it('decreases interval after every 10 lines', () => {
-      const playfield = [...Array(20)].map((_, y) =>
-        [...Array(10)].map(() => (y === 19 ? 'I' : undefined))
-      );
       const result = reducer(
         {
           ...initialState,
@@ -183,9 +185,6 @@ describe('reducer', () => {
       expect(result.interval).to.equal(900);
     });
     it('limites minimum interval to 100', () => {
-      const playfield = [...Array(20)].map((_, y) =>
-        [...Array(10)].map(() => (y === 19 ? 'I' : undefined))
-      );
       const result = reducer(
         {
           ...initialState,
@@ -252,12 +251,36 @@ describe('reducer', () => {
       expect(result.queue).to.deep.equal([O, S, I, O, T, S, Z, J, L]);
     });
   });
-  it('dies when there is no space to spawn', () => {
+  it('dies when the tetromino is landed when spawned', () => {
     const state = {
       ...initialState,
       tetromino: undefined,
       phase: phases.spawning,
-      playfield: [...Array(20)].map(() => [...Array(10)].map(() => 'I'))
+      playfield: [
+        [_, _, _, _, _, _, _, _, _, _],
+        [_, _, _, _, _, _, _, _, _, _],
+        [_, o, o, o, o, o, o, o, o, o],
+        ...[...Array(17)].map(() => [_, o, o, o, o, o, o, o, o, o])
+      ]
+    };
+    const result = reducer(state, {
+      type: 'spawn'
+    });
+    expect(result.phase).to.equal(phases.gameOver);
+    expect(result.sfx).to.equal('gameOver');
+    expect(result.alive).to.equal(false);
+  });
+  it('dies when there is blocked out', () => {
+    const state = {
+      ...initialState,
+      tetromino: undefined,
+      phase: phases.spawning,
+      playfield: [
+        [_, o, o, o, o, o, o, o, o, o],
+        [_, o, o, o, o, o, o, o, o, o],
+        [_, _, _, _, _, _, _, _, _, o],
+        ...[...Array(17)].map(() => [_, o, o, o, o, o, o, o, o, o])
+      ]
     };
     const result = reducer(state, {
       type: 'spawn'
@@ -273,7 +296,7 @@ describe('reducer', () => {
     expect(result.phase).to.equal(phases.locking);
     expect(result.tetromino).to.deep.equal({
       ...initialState.tetromino,
-      top: 18
+      top: 20
     });
     expect(result.sfx).to.equal('hardDrop');
   });
@@ -287,9 +310,7 @@ describe('reducer', () => {
         }
       );
       expect(result).to.deep.equal({
-        playfield: [...Array(20)].map(() =>
-          [...Array(10)].map(() => undefined)
-        ),
+        playfield: emptyPlayField,
         queue: [I, J, L, O, S, T, Z],
         phase: phases.starting,
         tetromino: undefined,
