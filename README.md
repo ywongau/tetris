@@ -1,3 +1,5 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ywongau_tetris&metric=alert_status)](https://sonarcloud.io/dashboard?id=ywongau_tetris)
+
 ## Available Scripts
 
 In the project directory, you can run:
