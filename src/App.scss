@@ -13,12 +13,11 @@ body {
 body {
   background-image: url('img/background.webp');
   background-size: cover;
+  display: flex;
 }
 #root {
   display: flex;
-  justify-content: center;
-  padding-top: 2rem;
-  height: auto;
+  margin: auto;
 }
 $frame-base-color: rgba(64, 64, 64, 0.9);
 $background-color: rgba(24, 24, 24, 0.5);
