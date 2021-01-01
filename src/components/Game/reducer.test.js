@@ -18,7 +18,8 @@ const initialState = {
   tetromino: I,
   alive: true,
   interval: 1000,
-  lines: 0
+  lines: 0,
+  originalPhase: undefined
 };
 // https://tetris.fandom.com/wiki/Tetris_Guideline
 describe('reducer', () => {
@@ -281,9 +282,9 @@ describe('reducer', () => {
     expect(result.sfx).to.equal('hardDrop');
   });
   describe('start', () => {
-    it('initilises state', () => {
+    it('initialises state', () => {
       const result = reducer(
-        {},
+        { phase: phases.pending },
         {
           type: 'start',
           payload: [I, J, L, O, S, T, Z]
@@ -299,7 +300,8 @@ describe('reducer', () => {
         alive: true,
         interval: 1000,
         lines: 0,
-        countdown: 3
+        countdown: 3,
+        originalPhase: undefined
       });
     });
   });
@@ -331,6 +333,34 @@ describe('reducer', () => {
         ...state,
         countdown: 0
       });
+    });
+  });
+  describe('pause', () => {
+    it('stores current phase', () => {
+      const result = reducer(initialState, {
+        type: 'pause'
+      });
+      expect(result).to.deep.equal({
+        ...initialState,
+        phase: phases.paused,
+        originalPhase: initialState.phase
+      });
+    });
+  });
+  describe('restore', () => {
+    it('restores phase', () => {
+      const result = reducer(
+        {
+          ...initialState,
+          phase: phases.resuming,
+          originalPhase: initialState.phase
+        },
+        {
+          type: 'restore'
+        }
+      );
+      expect(result.originalPhase).to.equal(undefined);
+      expect(result.phase).to.equal(initialState.phase);
     });
   });
 });

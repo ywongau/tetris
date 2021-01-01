@@ -17,7 +17,9 @@ export const phases = {
   clearing: 'clearing',
   gameOver: 'gameOver',
   starting: 'starting',
-  pending: undefined
+  pending: 'pending',
+  paused: 'paused',
+  resuming: 'resuming'
 };
 
 const doLock = (state) => {
@@ -45,9 +47,7 @@ const visitors = {
     return {
       ...state,
       tetromino: updatedTetromino,
-      phase: landed(updatedTetromino, playfield)
-        ? phases.locking
-        : phases.descending
+      phase: landed(updatedTetromino, playfield) ? phases.locking : state.phase
     };
   },
   move: (state, action) => {
@@ -132,11 +132,27 @@ const visitors = {
     alive: true,
     interval: 1000,
     lines: 0,
-    countdown: 3
+    countdown: 3,
+    originalPhase: undefined
   }),
   countdown: (state) => ({
     ...state,
     countdown: Math.max(0, state.countdown - 1)
+  }),
+  pause: (state) => ({
+    ...state,
+    phase: phases.paused,
+    originalPhase: state.phase
+  }),
+  resume: (state) => ({
+    ...state,
+    phase: phases.resuming,
+    countdown: 3
+  }),
+  restore: (state) => ({
+    ...state,
+    phase: state.originalPhase,
+    originalPhase: undefined
   })
 };
 const validPhases = {
@@ -149,7 +165,10 @@ const validPhases = {
   spawn: [phases.spawning, phases.starting],
   hardDrop: [phases.descending],
   start: [phases.pending, phases.gameOver],
-  countdown: [phases.starting]
+  countdown: [phases.starting, phases.resuming],
+  pause: [phases.descending, phases.locking, phases.clearing, phases.spawning],
+  resume: [phases.paused],
+  restore: [phases.resuming]
 };
 export const reducer = (state, action) =>
   validPhases[action.type]?.includes(state.phase)

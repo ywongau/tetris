@@ -132,17 +132,30 @@ describe('Game', () => {
       await tick(1000);
     };
 
-    it('counts down', async () => {
+    it('counts down when play and resume are clicked', async () => {
       renderGame();
-      const button = screen.getByText('PLAY');
-      fireEvent.click(button);
+      const playButton = screen.getByText('PLAY');
+      fireEvent.click(playButton);
+      expect(screen.queryByText('PLAY')).to.equal(null);
       screen.getByText('3');
       await tick(1000, 1);
       screen.getByText('2');
       await tick(1000, 1);
       screen.getByText('1');
       await tick(1000, 1);
-      expect(screen.queryByText('PLAY')).to.equal(null);
+      expect(screen.queryByText('1')).to.equal(null);
+      await tick(1000, 1);
+      fireEvent.keyDown(document.body, { key: 'Escape' });
+      const resumeButton = screen.getByText('RESUME');
+      fireEvent.click(resumeButton);
+      expect(screen.queryByText('RESUME')).to.equal(null);
+      screen.getByText('3');
+      await tick(1000, 1);
+      screen.getByText('2');
+      await tick(1000, 1);
+      screen.getByText('1');
+      await tick(1000, 1);
+      expect(screen.queryByText('1')).to.equal(null);
     });
     it('falls down and gets a new tetromino', async () => {
       renderGame();
@@ -210,12 +223,19 @@ describe('Game', () => {
       expect(cells[3][5].className).to.equal('I');
       expect(cells[4][5].className).to.equal('I');
       fireEvent.keyDown(document.body, {
+        key: 'z'
+      });
+      expect(cells[2][3].className).to.equal('I');
+      expect(cells[2][4].className).to.equal('I');
+      expect(cells[2][5].className).to.equal('I');
+      expect(cells[2][6].className).to.equal('I');
+      fireEvent.keyDown(document.body, {
         key: ' '
       });
-      expect(cells[16][5].className).to.equal('I');
-      expect(cells[17][5].className).to.equal('I');
-      expect(cells[18][5].className).to.equal('I');
+      expect(cells[19][3].className).to.equal('I');
+      expect(cells[19][4].className).to.equal('I');
       expect(cells[19][5].className).to.equal('I');
+      expect(cells[19][6].className).to.equal('I');
     });
   });
 });

@@ -2,7 +2,7 @@ import React from 'react';
 import { phases } from './reducer';
 
 const Game = (customHook) => () => {
-  const { state, start } = customHook();
+  const { state, start, resume } = customHook();
   const getTetrominoBlock = (tetromino, x, y) =>
     tetromino && tetromino.shape[y - tetromino.top]?.[x - tetromino.left];
   return (
@@ -40,6 +40,12 @@ const Game = (customHook) => () => {
             <button onClick={start}>PLAY</button>
           </div>
         ) : null}
+        {state.phase === phases.paused ? (
+          <div className="controls">
+            <button onClick={resume}>RESUME</button>
+          </div>
+        ) : null}
+
         {state.countdown > 0 ? (
           <div className="countdown">{state.countdown}</div>
         ) : null}

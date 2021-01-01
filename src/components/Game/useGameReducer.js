@@ -11,14 +11,17 @@ const keyMappings = {
 };
 export const UseGameReducer = (audio, randomizer) => () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const hasTetromino = state.tetromino !== undefined;
+  const shouldTick =
+    state.alive &&
+    state.tetromino !== undefined &&
+    state.phase !== phases.paused;
   useEffect(() => {
-    const handle =
-      state.alive && hasTetromino
-        ? setInterval(() => dispatch({ type: 'tick' }), state.interval)
-        : 0;
+    const handle = shouldTick
+      ? setInterval(() => dispatch({ type: 'tick' }), state.interval)
+      : 0;
     return () => clearInterval(handle);
-  }, [state.alive, hasTetromino, state.interval]);
+  }, [shouldTick, state.interval]);
+
   useEffect(() => {
     if (state.sfx) {
       audio[state.sfx]();
@@ -66,6 +69,21 @@ export const UseGameReducer = (audio, randomizer) => () => {
             payload: randomizer()
           });
         }
+      },
+      [phases.resuming]: () => {
+        if (state.countdown > 0) {
+          setTimeout(
+            () =>
+              dispatch({
+                type: 'countdown'
+              }),
+            1000
+          );
+        } else {
+          dispatch({
+            type: 'restore'
+          });
+        }
       }
     };
     phaseVisitors[state.phase]?.();
@@ -81,6 +99,12 @@ export const UseGameReducer = (audio, randomizer) => () => {
       if (e.key === ' ') {
         dispatch({ type: 'hardDrop' });
       }
+      if (e.key === 'Escape') {
+        dispatch({ type: 'pause' });
+      }
+      if (e.key === 'z') {
+        dispatch({ type: 'rotateLeft' });
+      }
     };
     if (state.alive) {
       document.body.addEventListener('keydown', onKeydown);
@@ -89,8 +113,10 @@ export const UseGameReducer = (audio, randomizer) => () => {
   }, [state.alive]);
 
   const start = () => dispatch({ type: 'start', payload: randomizer() });
+  const resume = () => dispatch({ type: 'resume' });
   return {
     state,
-    start
+    start,
+    resume
   };
 };
