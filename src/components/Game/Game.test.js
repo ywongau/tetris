@@ -80,6 +80,9 @@ describe('Game', () => {
     let _timers;
     let _fakeBufferSource;
     let _fakeAudioContext;
+    function FakeAudioContext() {
+      return _fakeAudioContext;
+    }
     const fakeRandomizer = () => [I, O, J, L, S, T, Z];
     beforeEach(() => {
       _timers = sinon.useFakeTimers();
@@ -98,10 +101,7 @@ describe('Game', () => {
 
     const renderGame = () => {
       const Game = GameFactory(
-        UseGameReducer(
-          Audio(() => _fakeAudioContext),
-          fakeRandomizer
-        )
+        UseGameReducer(Audio(FakeAudioContext), fakeRandomizer)
       );
       render(<Game />);
     };

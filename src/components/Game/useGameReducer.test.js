@@ -12,6 +12,9 @@ describe('hooks', () => {
   let _timers;
   let _fakeBufferSource;
   let _fakeAudioContext;
+  function FakeAudioContext() {
+    return _fakeAudioContext;
+  }
   const tick = (ms) =>
     act(() => {
       _timers.tick(ms);
@@ -52,10 +55,7 @@ describe('hooks', () => {
   };
 
   it('appends a new queue when there are 3 items in queue', async () => {
-    const hook = UseGameReducer(
-      Audio(() => _fakeAudioContext),
-      fakeRandomizer
-    );
+    const hook = UseGameReducer(Audio(FakeAudioContext), fakeRandomizer);
     const { result } = renderHook(() => hook());
     play(result.current.start);
     softDrop(18);
@@ -63,10 +63,7 @@ describe('hooks', () => {
     expect(result.current.state.queue).to.deep.equal([I, I, I, I, I, I, I]);
   });
   it('dies', async () => {
-    const hook = UseGameReducer(
-      Audio(() => _fakeAudioContext),
-      fakeRandomizer
-    );
+    const hook = UseGameReducer(Audio(FakeAudioContext), fakeRandomizer);
     const { result } = renderHook(() => hook());
     play(result.current.start);
     for (let i = 18; i >= 1; i--) {
