@@ -194,6 +194,9 @@ describe('Game', () => {
       const playfield = screen.getByTestId('playfield');
       const cells = [...playfield.childNodes].map((row) => [...row.childNodes]);
       fireEvent.keyDown(document.body, {
+        key: 't'
+      });
+      fireEvent.keyDown(document.body, {
         key: 'ArrowLeft'
       });
       await waitFor(() => undefined);

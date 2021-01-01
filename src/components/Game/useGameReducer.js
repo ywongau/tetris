@@ -9,9 +9,12 @@ const keyActionMappings = {
   ArrowRight: { type: 'move', payload: directions.right },
   ArrowDown: { type: 'move', payload: directions.down },
   ArrowUp: { type: 'rotateRight' },
+  x: { type: 'rotateRight' },
   ' ': { type: 'hardDrop' },
   Escape: { type: 'pause' },
-  z: { type: 'rotateLeft' }
+  F1: { type: 'pause' },
+  z: { type: 'rotateLeft' },
+  Control: { type: 'rotateLeft' }
 };
 export const UseGameReducer = (audio, randomizer) => () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -96,6 +99,7 @@ export const UseGameReducer = (audio, randomizer) => () => {
     const onKeydown = (e) => {
       if (keyActionMappings[e.key]) {
         dispatch(keyActionMappings[e.key]);
+        e.preventDefault();
       }
     };
     if (state.alive) {
