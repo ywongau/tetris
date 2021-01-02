@@ -3,16 +3,21 @@ import { left, right } from '../constants/wallKickData';
 
 import { directionOffset } from '../constants/directions';
 
-const wallKick = (tetromino, playfield, wallKickData) => {
+const wallKick = (
+  tetromino,
+  playfield,
+  wallKickData,
+  wallKickDataIndex = 0
+) => {
   const wallKicked = {
     ...tetromino,
-    left: tetromino.left + wallKickData[0][0],
-    top: tetromino.top + wallKickData[0][1]
+    left: tetromino.left + wallKickData[wallKickDataIndex][0],
+    top: tetromino.top + wallKickData[wallKickDataIndex][1]
   };
   return blockedOut(wallKicked, playfield)
-    ? wallKickData.length === 1
+    ? wallKickDataIndex === wallKickData.length - 1
       ? null
-      : wallKick(tetromino, playfield, wallKickData.slice(1))
+      : wallKick(tetromino, playfield, wallKickData, wallKickDataIndex + 1)
     : wallKicked;
 };
 const tryRotate = (tetromino, originalTetromino, playfield, wallKickData) =>
