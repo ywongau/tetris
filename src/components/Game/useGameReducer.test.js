@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react-hooks';
 
-import { Audio } from '../../sfx/audio';
 import { I } from '../../constants/tetrominos';
+import { Player } from '../../sfx/player';
 import { expect } from 'chai';
 import sinon from 'sinon';
 
@@ -55,7 +55,7 @@ describe('useGameReducer', () => {
   };
 
   it('appends a new queue when there are 3 items in queue', async () => {
-    const hook = UseGameReducer(Audio(FakeAudioContext), fakeRandomizer);
+    const hook = UseGameReducer(Player(FakeAudioContext), fakeRandomizer);
     const { result } = renderHook(() => hook());
     play(result.current.start);
     softDrop(20);
@@ -63,7 +63,7 @@ describe('useGameReducer', () => {
     expect(result.current.state.queue).to.deep.equal([I, I, I, I, I, I, I]);
   });
   it('dies', async () => {
-    const hook = UseGameReducer(Audio(FakeAudioContext), fakeRandomizer);
+    const hook = UseGameReducer(Player(FakeAudioContext), fakeRandomizer);
     const { result } = renderHook(() => hook());
     play(result.current.start);
     for (let i = 20; i >= 1; i--) {

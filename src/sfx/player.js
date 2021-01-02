@@ -7,7 +7,7 @@ import hardDropMp3 from './mp3/hardDrop.mp3';
 import lockedMp3 from './mp3/locked.mp3';
 import spawnMp3 from './mp3/spawn.mp3';
 
-export const Audio = (AudioContext) => {
+export const Player = (AudioContext) => {
   const context = new AudioContext();
   const decode = (file) =>
     fetch(file)

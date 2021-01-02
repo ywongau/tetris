@@ -5,6 +5,7 @@ export const O = {
   top: 0,
   left: 4,
   name: o,
+  rotationPhase: 0,
   shape: [
     [o, o],
     [o, o]
@@ -15,6 +16,7 @@ export const I = {
   top: 0,
   left: 3,
   name: i,
+  rotationPhase: 0,
   shape: [
     [_, _, _, _],
     [i, i, i, i],
@@ -27,6 +29,7 @@ export const S = {
   top: 0,
   left: 3,
   name: s,
+  rotationPhase: 0,
   shape: [
     [_, s, s],
     [s, s, _],
@@ -38,6 +41,7 @@ export const Z = {
   top: 0,
   left: 3,
   name: z,
+  rotationPhase: 0,
   shape: [
     [z, z, _],
     [_, z, z],
@@ -49,6 +53,7 @@ export const T = {
   top: 0,
   left: 3,
   name: t,
+  rotationPhase: 0,
   shape: [
     [_, t, _],
     [t, t, t],
@@ -61,6 +66,7 @@ export const J = {
   top: 0,
   left: 3,
   name: j,
+  rotationPhase: 0,
   shape: [
     [j, _, _],
     [j, j, j],
@@ -73,6 +79,7 @@ export const L = {
   top: 0,
   left: 3,
   name: l,
+  rotationPhase: 0,
   shape: [
     [_, _, l],
     [l, l, l],

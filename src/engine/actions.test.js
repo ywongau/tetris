@@ -1,12 +1,13 @@
-import { expect } from 'chai';
 import { hardDrop, lock, move, rotateLeft, rotateRight } from './actions';
+
 import { directions } from '../constants/directions';
+import { expect } from 'chai';
 
 const _ = undefined;
 const o = 'I';
 // https://tetris.fandom.com/wiki/Tetris_Guideline
 describe('rotate left', () => {
-  it('works for a 4x4 tetromino', () => {
+  it('works for I', () => {
     const playfield = [
       [_, _, _, _, _],
       [_, _, _, _, _],
@@ -17,6 +18,8 @@ describe('rotate left', () => {
     const tetromino = {
       left: 0,
       top: 0,
+      name: 'I',
+      rotationPhase: 3,
       shape: [
         [_, o, _, _],
         [_, o, _, _],
@@ -28,6 +31,8 @@ describe('rotate left', () => {
     expect(result).to.deep.equal({
       left: 0,
       top: 0,
+      name: 'I',
+      rotationPhase: 2,
       shape: [
         [_, _, _, _],
         [_, _, _, _],
@@ -36,7 +41,7 @@ describe('rotate left', () => {
       ]
     });
   });
-  it('works for a 3x3 tetromino', () => {
+  it('works for T', () => {
     const playfield = [
       [_, _, _, _, _],
       [_, _, _, _, _],
@@ -47,6 +52,8 @@ describe('rotate left', () => {
     const tetromino = {
       left: 0,
       top: 0,
+      name: 'T',
+      rotationPhase: 0,
       shape: [
         [_, o, _],
         [o, o, o],
@@ -57,6 +64,8 @@ describe('rotate left', () => {
     expect(result).to.deep.equal({
       left: 0,
       top: 0,
+      name: 'T',
+      rotationPhase: 3,
       shape: [
         [_, o, _],
         [o, o, _],
@@ -64,7 +73,7 @@ describe('rotate left', () => {
       ]
     });
   });
-  it('does nothing if it collides with left wall', () => {
+  it('wall kicks', () => {
     const playfield = [
       [_, _, _, _, _],
       [_, _, _, _, _],
@@ -75,6 +84,8 @@ describe('rotate left', () => {
     const tetromino = {
       left: -1,
       top: 0,
+      name: 'I',
+      rotationPhase: 3,
       shape: [
         [_, o, _, _],
         [_, o, _, _],
@@ -83,30 +94,20 @@ describe('rotate left', () => {
       ]
     };
     const result = rotateLeft(tetromino, playfield);
-    expect(result).to.deep.equal(tetromino);
-  });
-  it('does nothing if it collides with right wall', () => {
-    const playfield = [
-      [_, _, _, _, _],
-      [_, _, _, _, _],
-      [_, _, _, _, _],
-      [_, _, _, _, _],
-      [_, _, _, _, _]
-    ];
-    const tetromino = {
-      left: 2,
+    expect(result).to.deep.equal({
+      left: 0,
       top: 0,
+      name: 'I',
+      rotationPhase: 2,
       shape: [
-        [_, o, _, _],
-        [_, o, _, _],
-        [_, o, _, _],
-        [_, o, _, _]
+        [_, _, _, _],
+        [_, _, _, _],
+        [o, o, o, o],
+        [_, _, _, _]
       ]
-    };
-    const result = rotateLeft(tetromino, playfield);
-    expect(result).to.deep.equal(tetromino);
+    });
   });
-  it('does nothing if it collides with floor', () => {
+  it('floor kicks', () => {
     const playfield = [
       [_, _, _, _, _],
       [_, _, _, _, _],
@@ -117,6 +118,8 @@ describe('rotate left', () => {
     const tetromino = {
       left: 0,
       top: 2,
+      name: 'I',
+      rotationPhase: 2,
       shape: [
         [_, _, _, _],
         [_, _, _, _],
@@ -125,19 +128,32 @@ describe('rotate left', () => {
       ]
     };
     const result = rotateLeft(tetromino, playfield);
-    expect(result).to.deep.equal(tetromino);
+    expect(result).to.deep.equal({
+      left: -2,
+      top: 1,
+      name: 'I',
+      rotationPhase: 1,
+      shape: [
+        [_, _, o, _],
+        [_, _, o, _],
+        [_, _, o, _],
+        [_, _, o, _]
+      ]
+    });
   });
-  it('does nothing if the result collides with existing blocks', () => {
+  it('does nothing if no wall tick is possible', () => {
     const playfield = [
       [_, _, _, _, _],
-      [_, _, _, _, _],
-      [o, _, _, _, _],
-      [o, _, _, _, _],
-      [o, _, _, _, _]
+      [_, _, o, _, _],
+      [o, _, o, _, _],
+      [o, _, o, _, _],
+      [o, _, o, _, _]
     ];
     const tetromino = {
       left: 0,
-      top: 0,
+      top: 1,
+      name: 'I',
+      rotationPhase: 3,
       shape: [
         [_, o, _, _],
         [_, o, _, _],
@@ -148,10 +164,44 @@ describe('rotate left', () => {
     const result = rotateLeft(tetromino, playfield);
     expect(result).to.deep.equal(tetromino);
   });
+  it('works for O', () => {
+    const playfield = [
+      [_, _, _, _, _],
+      [_, _, _, _, _],
+      [_, _, _, _, _],
+      [_, _, _, _, _],
+      [_, _, _, _, _]
+    ];
+    const tetromino = {
+      left: 0,
+      top: 2,
+      name: 'O',
+      rotationPhase: 2,
+      shape: [
+        [_, _, _, _],
+        [_, o, o, _],
+        [_, o, o, _],
+        [_, _, _, _]
+      ]
+    };
+    const result = rotateLeft(tetromino, playfield);
+    expect(result).to.deep.equal({
+      left: 0,
+      top: 2,
+      name: 'O',
+      rotationPhase: 1,
+      shape: [
+        [_, _, _, _],
+        [_, o, o, _],
+        [_, o, o, _],
+        [_, _, _, _]
+      ]
+    });
+  });
 });
 
 describe('rotate right', () => {
-  it('works', () => {
+  it('works for I', () => {
     const playfield = [
       [_, _, _, _, _],
       [_, _, _, _, _],
@@ -162,6 +212,8 @@ describe('rotate right', () => {
     const tetromino = {
       left: 0,
       top: 0,
+      name: 'I',
+      rotationPhase: 3,
       shape: [
         [_, o, _, _],
         [_, o, _, _],
@@ -173,6 +225,8 @@ describe('rotate right', () => {
     expect(result).to.deep.equal({
       left: 0,
       top: 0,
+      name: 'I',
+      rotationPhase: 0,
       shape: [
         [_, _, _, _],
         [o, o, o, o],
@@ -181,7 +235,7 @@ describe('rotate right', () => {
       ]
     });
   });
-  it('works for a 3x3 tetromino', () => {
+  it('works for T', () => {
     const playfield = [
       [_, _, _, _, _],
       [_, _, _, _, _],
@@ -192,6 +246,8 @@ describe('rotate right', () => {
     const tetromino = {
       left: 0,
       top: 0,
+      name: 'T',
+      rotationPhase: 0,
       shape: [
         [_, o, _],
         [o, o, o],
@@ -202,6 +258,8 @@ describe('rotate right', () => {
     expect(result).to.deep.equal({
       left: 0,
       top: 0,
+      name: 'T',
+      rotationPhase: 1,
       shape: [
         [_, o, _],
         [_, o, o],
@@ -209,49 +267,7 @@ describe('rotate right', () => {
       ]
     });
   });
-  it('does nothing if it collides with left wall', () => {
-    const playfield = [
-      [_, _, _, _, _],
-      [_, _, _, _, _],
-      [_, _, _, _, _],
-      [_, _, _, _, _],
-      [_, _, _, _, _]
-    ];
-    const tetromino = {
-      left: -1,
-      top: 0,
-      shape: [
-        [_, o, _, _],
-        [_, o, _, _],
-        [_, o, _, _],
-        [_, o, _, _]
-      ]
-    };
-    const result = rotateRight(tetromino, playfield);
-    expect(result).to.deep.equal(tetromino);
-  });
-  it('does nothing if it collides with right wall', () => {
-    const playfield = [
-      [_, _, _, _, _],
-      [_, _, _, _, _],
-      [_, _, _, _, _],
-      [_, _, _, _, _],
-      [_, _, _, _, _]
-    ];
-    const tetromino = {
-      left: 2,
-      top: 0,
-      shape: [
-        [_, o, _, _],
-        [_, o, _, _],
-        [_, o, _, _],
-        [_, o, _, _]
-      ]
-    };
-    const result = rotateRight(tetromino, playfield);
-    expect(result).to.deep.equal(tetromino);
-  });
-  it('does nothing if it collides with floor', () => {
+  it('works for O', () => {
     const playfield = [
       [_, _, _, _, _],
       [_, _, _, _, _],
@@ -262,6 +278,77 @@ describe('rotate right', () => {
     const tetromino = {
       left: 0,
       top: 2,
+      name: 'O',
+      rotationPhase: 2,
+      shape: [
+        [_, _, _, _],
+        [_, o, o, _],
+        [_, o, o, _],
+        [_, _, _, _]
+      ]
+    };
+    const result = rotateRight(tetromino, playfield);
+    expect(result).to.deep.equal({
+      left: 0,
+      top: 2,
+      name: 'O',
+      rotationPhase: 3,
+      shape: [
+        [_, _, _, _],
+        [_, o, o, _],
+        [_, o, o, _],
+        [_, _, _, _]
+      ]
+    });
+  });
+  it('wall kicks', () => {
+    const playfield = [
+      [_, _, _, _, _],
+      [_, _, _, _, _],
+      [_, _, _, _, _],
+      [_, _, _, _, _],
+      [_, _, _, _, _]
+    ];
+    const tetromino = {
+      left: -1,
+      top: 0,
+      name: 'I',
+      rotationPhase: 3,
+      shape: [
+        [_, o, _, _],
+        [_, o, _, _],
+        [_, o, _, _],
+        [_, o, _, _]
+      ]
+    };
+    const result = rotateRight(tetromino, playfield);
+    expect(result).to.deep.equal({
+      left: 0,
+      top: 0,
+      name: 'I',
+      rotationPhase: 0,
+      shape: [
+        [_, _, _, _],
+        [o, o, o, o],
+        [_, _, _, _],
+        [_, _, _, _]
+      ]
+    });
+  });
+
+  it('floor kicks', () => {
+    const playfield = [
+      [_, _, _, _, _],
+      [_, _, _, _, _],
+      [_, _, _, _, _],
+      [_, _, _, _, _],
+      [_, _, _, _, _]
+    ];
+    const tetromino = {
+      left: 0,
+      top: 2,
+      name: 'I',
+      rotationPhase: 2,
       shape: [
         [_, _, _, _],
         [_, _, _, _],
@@ -270,19 +357,32 @@ describe('rotate right', () => {
       ]
     };
     const result = rotateRight(tetromino, playfield);
-    expect(result).to.deep.equal(tetromino);
+    expect(result).to.deep.equal({
+      left: 2,
+      top: 1,
+      name: 'I',
+      rotationPhase: 3,
+      shape: [
+        [_, o, _, _],
+        [_, o, _, _],
+        [_, o, _, _],
+        [_, o, _, _]
+      ]
+    });
   });
-  it('does nothing if the result collides with existing blocks', () => {
+  it('does nothing no wall kick is poissible', () => {
     const playfield = [
       [_, _, _, _, _],
-      [o, _, _, _, _],
-      [o, _, _, _, _],
-      [o, _, _, _, _],
-      [o, _, _, _, _]
+      [o, _, o, _, _],
+      [o, _, o, _, _],
+      [o, _, o, _, _],
+      [o, _, o, _, _]
     ];
     const tetromino = {
       left: 0,
       top: 0,
+      name: 'I',
+      rotationPhase: 3,
       shape: [
         [_, o, _, _],
         [_, o, _, _],

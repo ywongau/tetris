@@ -7,8 +7,8 @@ import {
   waitFor
 } from '@testing-library/react';
 
-import { Audio } from '../../sfx/audio';
 import GameFactory from './Game';
+import { Player } from '../../sfx/player';
 import React from 'react';
 import { expect } from 'chai';
 import { phases } from '../../constants/phases';
@@ -100,7 +100,7 @@ describe('Game', () => {
 
     const renderGame = () => {
       const Game = GameFactory(
-        UseGameReducer(Audio(FakeAudioContext), fakeRandomizer)
+        UseGameReducer(Player(FakeAudioContext), fakeRandomizer)
       );
       render(<Game />);
     };
