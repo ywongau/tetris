@@ -86,3 +86,7 @@ export const L = {
     [_, _, _]
   ]
 };
+
+export const lookup = {
+  O, L, J, Z, I, T, S
+};

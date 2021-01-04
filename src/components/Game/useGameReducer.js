@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import { directions } from '../../constants/directions';
-import { phases } from '../../constants/phases';
 import { initialState, reducer } from './reducer';
 import { useEffect, useReducer } from 'react';
+
+import { directions } from '../../constants/directions';
+import { phases } from '../../constants/phases';
 
 const keyActionMappings = {
   ArrowLeft: { type: 'move', payload: directions.left },
@@ -38,14 +39,10 @@ export const UseGameReducer = (audio, randomizer) => () => {
   useEffect(() => {
     const phaseVisitors = {
       [phases.spawning]: () =>
-        setTimeout(
-          () =>
-            dispatch({
-              type: 'spawn',
-              payload: state.queue.length <= 3 ? randomizer() : []
-            }),
-          500
-        ),
+        dispatch({
+          type: 'spawn',
+          payload: state.queue.length <= 3 ? randomizer() : []
+        }),
       [phases.locking]: () =>
         setTimeout(
           () =>
