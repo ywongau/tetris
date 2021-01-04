@@ -12,7 +12,7 @@ const Game = (customHook) => () => {
           <h1>HOLD</h1>
           <div className="frame-content hold">
             <div className="small-tetromino">
-              {state?.hold?.shape?.map((row, y) => (
+              {state.hold?.shape.map((row, y) => (
                 <div key={y} className="row">
                   {row.map((block, x) => (
                     <div className={block} key={x}></div>
