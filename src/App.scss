@@ -9,6 +9,7 @@ html {
 html,
 body {
   height: 100%;
+  font-family: 'Courier New', Courier, monospace;
 }
 body {
   background-image: url('img/background.webp');
@@ -20,7 +21,8 @@ body {
   margin: auto;
 }
 $frame-base-color: rgba(64, 64, 64, 0.9);
-$background-color: rgba(24, 24, 24, 0.5);
+$background-color: rgba(0, 0, 0, 0.5);
+
 .frame {
   border-width: 2px;
   border-style: solid;
@@ -31,9 +33,7 @@ $background-color: rgba(24, 24, 24, 0.5);
   border-right-color: darken($frame-base-color, 5%);
   border-bottom-color: darken($frame-base-color, 10%);
   background-clip: padding-box;
-  > .playfield,
-  .next-tetrominos,
-  .lines {
+  .frame-content {
     border-bottom-color: lighten($frame-base-color, 10%);
     border-right-color: lighten($frame-base-color, 5%);
     border-left-color: darken($frame-base-color, 5%);
@@ -105,54 +105,34 @@ main {
     border-style: solid;
     border-radius: 2px;
   }
+  @mixin brick($base-color) {
+    background: $base-color;
+    border-top-color: lighten($base-color, 10%);
+    border-left-color: lighten($base-color, 5%);
+    border-right-color: darken($base-color, 5%);
+    border-bottom-color: darken($base-color, 10%);
+  }
+
   div.I {
-    background: hsl(180, 100%, 25%);
-    border-top-color: hsl(180, 100%, 35%);
-    border-left-color: hsl(180, 100%, 30%);
-    border-right-color: hsl(180, 100%, 20%);
-    border-bottom-color: hsl(180, 100%, 15%);
+    @include brick(hsl(180, 100%, 25%));
   }
   div.O {
-    background: hsl(51, 100%, 40%);
-    border-top-color: hsl(51, 100%, 50%);
-    border-left-color: hsl(51, 100%, 45%);
-    border-right-color: hsl(51, 100%, 35%);
-    border-bottom-color: hsl(51, 100%, 30%);
+    @include brick(hsl(51, 100%, 40%));
   }
   div.T {
-    background: hsl(300, 100%, 25%);
-    border-top-color: hsl(300, 100%, 35%);
-    border-left-color: hsl(300, 100%, 30%);
-    border-right-color: hsl(300, 100%, 20%);
-    border-bottom-color: hsl(300, 100%, 15%);
+    @include brick(hsl(300, 100%, 40%));
   }
   div.S {
-    background: hsl(120, 100%, 25%);
-    border-top-color: hsl(120, 100%, 35%);
-    border-left-color: hsl(120, 100%, 30%);
-    border-right-color: hsl(120, 100%, 20%);
-    border-bottom-color: hsl(120, 100%, 15%);
+    @include brick(hsl(120, 100%, 25%));
   }
   div.Z {
-    background: hsl(0, 100%, 40%);
-    border-top-color: hsl(0, 100%, 50%);
-    border-left-color: hsl(0, 100%, 45%);
-    border-right-color: hsl(0, 100%, 35%);
-    border-bottom-color: hsl(0, 100%, 30%);
+    @include brick(hsl(0, 100%, 40%));
   }
   div.J {
-    background: hsl(230, 100%, 40%);
-    border-top-color: hsl(230, 100%, 50%);
-    border-left-color: hsl(230, 100%, 45%);
-    border-right-color: hsl(230, 100%, 35%);
-    border-bottom-color: hsl(230, 100%, 30%);
+    @include brick(hsl(230, 100%, 40%));
   }
   div.L {
-    background: hsl(30, 100%, 40%);
-    border-top-color: hsl(30, 100%, 50%);
-    border-left-color: hsl(30, 100%, 45%);
-    border-right-color: hsl(30, 100%, 35%);
-    border-bottom-color: hsl(30, 100%, 30%);
+    @include brick(hsl(30, 100%, 40%));
   }
 }
 .row.clearing div {
@@ -181,11 +161,16 @@ main {
     border: dashed 1px #fff;
   }
 }
-.next-tetrominos {
+.frame-content {
   width: calc(3rem + 4px);
-  height: calc(6rem + 4px);
+  &.next-tetrominos {
+    height: calc(6rem + 4px);
+  }
+  &.hold {
+    height: calc(2rem + 4px);
+  }
 }
-.next-tetromino {
+.small-tetromino {
   padding: 0.5rem;
   height: 2rem;
   width: 3rem;
@@ -197,7 +182,7 @@ main {
   }
   &:nth-child(2) div,
   &:nth-child(3) div {
-    opacity: 0.5;
+    opacity: 0.8;
   }
 }
 
@@ -205,7 +190,7 @@ h1 {
   font-size: 0.5rem;
   text-align: center;
   padding: 0;
-  margin: 0;
+  margin: 0.125rem 0;
 }
 .lines {
   text-align: right;

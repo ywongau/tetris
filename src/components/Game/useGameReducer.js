@@ -16,7 +16,8 @@ const keyActionMappings = {
   Escape: { type: 'pause' },
   F1: { type: 'pause' },
   z: { type: 'rotateLeft' },
-  Control: { type: 'rotateLeft' }
+  Control: { type: 'rotateLeft' },
+  c: { type: 'hold' }
 };
 export const UseGameReducer = (audio, randomizer) => () => {
   const [state, dispatch] = useReducer(reducer, initialState);

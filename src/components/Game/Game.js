@@ -7,8 +7,24 @@ const Game = (customHook) => () => {
     tetromino && tetromino.shape[y - tetromino.top]?.[x - tetromino.left];
   return (
     <>
+      <aside className="frame">
+        <section>
+          <h1>HOLD</h1>
+          <div className="frame-content hold">
+            <div className="small-tetromino">
+              {state?.hold?.shape?.map((row, y) => (
+                <div key={y} className="row">
+                  {row.map((block, x) => (
+                    <div className={block} key={x}></div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </aside>
       <main className="frame">
-        <div data-testid="playfield" className="playfield">
+        <div data-testid="playfield" className="playfield frame-content">
           {state.playfield.map((row, y) => (
             <div
               key={y}
@@ -50,24 +66,28 @@ const Game = (customHook) => () => {
           <div className="countdown">{state.countdown}</div>
         ) : null}
       </main>
-      <div className="frame">
-        <h1>NEXT</h1>
-        <div className="next-tetrominos">
-          {state.queue.slice(0, 3).map((tetromino, i) => (
-            <div className="next-tetromino" key={i}>
-              {tetromino.shape.map((row, y) => (
-                <div key={y} className="row">
-                  {row.map((block, x) => (
-                    <div className={block} key={x}></div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-        <h1>LINES</h1>
-        <div className="lines">{state.lines}</div>
-      </div>
+      <aside className="frame">
+        <section>
+          <h1>NEXT</h1>
+          <div className="frame-content next-tetrominos">
+            {state.queue.slice(0, 3).map((tetromino, i) => (
+              <div className="small-tetromino" key={i}>
+                {tetromino.shape.map((row, y) => (
+                  <div key={y} className="row">
+                    {row.map((block, x) => (
+                      <div className={block} key={x}></div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </section>
+        <section>
+          <h1>LINES</h1>
+          <div className="frame-content lines">{state.lines}</div>
+        </section>
+      </aside>
     </>
   );
 };

@@ -18,46 +18,49 @@ const { UseGameReducer } = require('./useGameReducer');
 describe('Game', () => {
   beforeEach(() => {});
   afterEach(cleanup);
+  const readTetrominoCells = (container) =>
+    [...container.querySelectorAll('.row')].map((row) =>
+      [...row.querySelectorAll('div')].map((cell) => cell.className)
+    );
+
   describe('Game with fake hooks', () => {
+    const _ = undefined;
+    const o = 'O';
+    const fakeState = {
+      playfield: [
+        ...[...Array(21)].map(() => [_, _, _, _, _, _, _, _, _, _]),
+        [o, o, o, o, o, o, o, o, o, o]
+      ],
+      tetromino: I,
+      phase: phases.descending,
+      queue: [J, L, O, S, T, Z],
+      lines: 3
+    };
     it('shows animation when clearedPlayfield lines', async () => {
       const fakeHook = () => ({
         state: {
-          playfield: [...Array(20)].map((_, y) =>
-            [...Array(10)].map(() => (y === 19 ? 'I' : undefined))
-          ),
-          tetromino: I,
-          phase: phases.clearing,
-          queue: [J, L, O, S, T, Z]
+          ...fakeState,
+          tetromino: undefined,
+          phase: phases.clearing
         }
       });
       const Game = GameFactory(fakeHook);
       render(<Game />);
       const playfield = screen.getByTestId('playfield');
-      const lastRow = playfield.childNodes[19];
+      const lastRow = playfield.childNodes[21];
       expect(lastRow.classList.contains('clearing')).to.equal(true);
     });
-    it('shows next and  lines', async () => {
+    it('shows next', async () => {
       const fakeHook = () => ({
-        state: {
-          playfield: [...Array(20)].map((_, y) =>
-            [...Array(10)].map(() => (y === 19 ? 'I' : undefined))
-          ),
-          tetromino: I,
-          phase: phases.descending,
-          queue: [J, L, O, S, T, Z],
-          lines: 3
-        }
+        state: fakeState
       });
       const Game = GameFactory(fakeHook);
-      const { container } = render(<Game />);
-      screen.getByText('NEXT');
-      screen.getByText('LINES');
-      screen.getByText('3');
-      const nextTetrominos = container.querySelectorAll('.next-tetromino');
-      const getNextTetromino = (n) =>
-        [...nextTetrominos[n].querySelectorAll('.row')].map((row) =>
-          [...row.querySelectorAll('div')].map((cell) => cell.className)
-        );
+      render(<Game />);
+      const nextTetrominos = screen
+        .getByText('NEXT')
+        .parentElement.querySelectorAll('.small-tetromino');
+      const getNextTetromino = (n) => readTetrominoCells(nextTetrominos[n]);
+
       expect(getNextTetromino(0)).to.deep.equal([
         ['J', '', ''],
         ['J', 'J', 'J'],
@@ -72,6 +75,15 @@ describe('Game', () => {
         ['O', 'O'],
         ['O', 'O']
       ]);
+    });
+    it('shows lines', () => {
+      const fakeHook = () => ({
+        state: fakeState
+      });
+      const Game = GameFactory(fakeHook);
+      render(<Game />);
+      screen.getByText('LINES');
+      screen.getByText('3');
     });
   });
 
@@ -102,7 +114,7 @@ describe('Game', () => {
       const Game = GameFactory(
         UseGameReducer(Player(FakeAudioContext), fakeRandomizer)
       );
-      render(<Game />);
+      return render(<Game />);
     };
     it('shows playfield', () => {
       renderGame();
@@ -239,6 +251,21 @@ describe('Game', () => {
       expect(cells[21][4].className).to.equal('I');
       expect(cells[21][5].className).to.equal('I');
       expect(cells[21][6].className).to.equal('I');
+    });
+    it('holds when c is pressed', async () => {
+      renderGame();
+      await play();
+      await waitFor(() => undefined);
+      fireEvent.keyDown(document.body, { key: 'c' });
+      const held = screen
+        .getByText('HOLD')
+        .parentNode.querySelector('.small-tetromino');
+      expect(readTetrominoCells(held)).to.deep.equal([
+        ['', '', '', ''],
+        ['I', 'I', 'I', 'I'],
+        ['', '', '', ''],
+        ['', '', '', '']
+      ]);
     });
   });
 });

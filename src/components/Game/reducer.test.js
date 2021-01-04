@@ -422,5 +422,19 @@ describe('reducer', () => {
       );
       expect(result.hold).to.deep.equal(I);
     });
+    it('should reset holdLock on spawn', () => {
+      const result = reducer(
+        {
+          ...initialState,
+          tetromino: undefined,
+          phase: phases.spawning,
+          holdLock: true
+        },
+        {
+          type: 'spawn'
+        }
+      );
+      expect(result.holdLock).to.equal(false);
+    });
   });
 });
