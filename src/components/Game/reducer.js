@@ -102,12 +102,11 @@ const visitors = {
     hardDrop: (state) => {
         const { tetromino, playfield } = state;
         const updatedTetromino = hardDrop(tetromino, playfield);
-        return {
+        return doLock({
             ...state,
             tetromino: updatedTetromino,
-            sfx: 'hardDrop',
             phase: phases.locking
-        };
+        });
     },
     start: (state, action) => ({
         playfield: emptyPlayField,
