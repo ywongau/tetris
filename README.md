@@ -16,8 +16,7 @@ Rules implemented:
  - [Lock delay](https://tetris.fandom.com/wiki/Lock_delay)
  - [Top out](https://tetris.fandom.com/wiki/Top_out)
  - [Next pieces](https://tetris.fandom.com/wiki/Next)
-
-Work in progress
+ - Start/Resume with 3 seconds count down
  - Hold
 
 TODO
