@@ -1,9 +1,9 @@
 # Guinea Bricks
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ywongau_tetris&metric=alert_status)](https://sonarcloud.io/dashboard?id=ywongau_tetris)
 
-Guinea Bricks is a guinea pig themed Tetris fan game that follows [Tetris Guildline](https://tetris.fandom.com/wiki/Tetris_Guideline)
+Guinea Bricks is a React based, guinea pig themed Tetris fan game that follows [Tetris Guildline](https://tetris.fandom.com/wiki/Tetris_Guideline)
 
-It uses React, game engine is test driven with Mocha, Chai, Sinon and React Testing Library
+The game engine is test driven with Mocha, Chai, Sinon and React Testing Library
 
 No guinuea pigs were harmed during its production
 
