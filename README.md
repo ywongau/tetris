@@ -32,7 +32,7 @@ TODO
 To avoid being sued by the Tetris Company, the following will not be implemented
  - Logo
  - Music
- - Copyright declaration
+ - Copyright statement
 
 ## Available Scripts
 
