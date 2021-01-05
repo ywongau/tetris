@@ -23,6 +23,11 @@ TODO
  - Recognition and rewarding of T-spin moves
  - Scoring system
  - Soft drop that doesn't depend on keyboard's auto repeat
+ 
+To avoid being sued by the Tetris Company, the following will not be implemented
+ - Logo
+ - Music
+ - Copyright declaretion
 
 ## Available Scripts
 
