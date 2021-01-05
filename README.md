@@ -3,6 +3,10 @@
 
 Guinea Bricks is a guinea pig themed Tetris fan game that follows [Tetris Guildline](https://tetris.fandom.com/wiki/Tetris_Guideline)
 
+It uses React, game engine is test driven with Mocha, Chai, Sinon and React Testing Library
+
+No guinuea pigs were harmed during its production
+
 Rules implemented:
  - Playfield
  - Tetromino colors
