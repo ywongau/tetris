@@ -20,7 +20,7 @@ body {
   display: flex;
   margin: auto;
 }
-$frame-base-color: rgba(64, 64, 64, 0.9);
+$frame-base-color: rgba(64, 64, 64, 0.7);
 $background-color: rgba(0, 0, 0, 0.5);
 
 .frame {
@@ -82,18 +82,6 @@ main {
   display: flex;
   width: min-content;
   margin: auto;
-  &:nth-child(2) {
-    .I,
-    .O,
-    .Z,
-    .T,
-    .S,
-    .L,
-    .J {
-      height: 0.5rem;
-      border-top: none;
-    }
-  }
   .I,
   .O,
   .Z,
@@ -142,6 +130,7 @@ main {
   &:nth-child(1) {
     display: none;
   }
+
   &:nth-child(2) div {
     height: 0.5rem;
     border-top: none;

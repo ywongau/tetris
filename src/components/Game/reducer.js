@@ -148,16 +148,19 @@ const visitors = {
     phase: state.originalPhase,
     originalPhase: undefined
   }),
-  hold: (state) =>
-    state.holdLock
+  hold: (state) => {
+    const tetromino = state.hold ?? state.queue[0];
+    return state.holdLock
       ? state
       : {
           ...state,
           hold: lookup[state.tetromino.name],
           holdLock: true,
-          tetromino: state.hold ?? state.queue[0],
-          queue: state.hold ? state.queue : state.queue.slice(1)
-        }
+          tetromino,
+          queue: state.hold ? state.queue : state.queue.slice(1),
+          ghostPiece: hardDrop(tetromino, state.playfield)
+        };
+  }
 };
 const validPhases = {
   tick: [phases.descending],

@@ -393,6 +393,9 @@ describe('reducer', () => {
       expect(result.tetromino).to.deep.equal(initialState.queue[0]);
       expect(result.queue).to.deep.equal(initialState.queue.slice(1));
       expect(result.holdLock).to.equal(true);
+      expect(result.ghostPiece).to.deep.equal(
+        hardDrop(result.tetromino, result.playfield)
+      );
     });
     it('spawns a held tetromino', () => {
       const result = reducer(
