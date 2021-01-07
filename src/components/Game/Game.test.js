@@ -18,7 +18,7 @@ const { UseGameReducer } = require('./useGameReducer');
 describe('Game', () => {
   beforeEach(() => {});
   afterEach(cleanup);
-  const readTetrominoCells = (container) =>
+  const readCells = (container) =>
     [...container.querySelectorAll('.row')].map((row) =>
       [...row.querySelectorAll('div')].map((cell) => cell.className)
     );
@@ -59,7 +59,7 @@ describe('Game', () => {
       const nextTetrominos = screen
         .getByText('NEXT')
         .parentElement.querySelectorAll('.small-tetromino');
-      const getNextTetromino = (n) => readTetrominoCells(nextTetrominos[n]);
+      const getNextTetromino = (n) => readCells(nextTetrominos[n]);
 
       expect(getNextTetromino(0)).to.deep.equal([
         ['J', '', ''],
@@ -95,6 +95,13 @@ describe('Game', () => {
       return _fakeAudioContext;
     }
     const fakeRandomizer = () => [I, O, J, L, S, T, Z];
+    const _ = '';
+    const i = 'I';
+    const o = 'O';
+    const x = 'ghost-piece';
+    const emptyLines = (n) =>
+      [...Array(n)].map(() => [...Array(10)].map(() => ''));
+
     beforeEach(() => {
       _timers = sinon.useFakeTimers();
       _fakeBufferSource = { connect: sinon.spy(), start: sinon.spy() };
@@ -172,39 +179,42 @@ describe('Game', () => {
       renderGame();
       await play();
       const playfield = screen.getByTestId('playfield');
-      const cells = [...playfield.childNodes].map((row) => [...row.childNodes]);
-
-      expect(cells[1][3].className).to.equal('I');
-      expect(cells[1][4].className).to.equal('I');
-      expect(cells[1][5].className).to.equal('I');
-      expect(cells[1][6].className).to.equal('I');
+      expect(readCells(playfield)).to.deep.equal([
+        ...emptyLines(1),
+        [_, _, _, i, i, i, i, _, _, _],
+        ...emptyLines(19),
+        [_, _, _, x, x, x, x, _, _, _]
+      ]);
       await tick(1000, 1);
-      expect(cells[2][3].className).to.equal('I');
-      expect(cells[2][4].className).to.equal('I');
-      expect(cells[2][5].className).to.equal('I');
-      expect(cells[2][6].className).to.equal('I');
+      expect(readCells(playfield)).to.deep.equal([
+        ...emptyLines(2),
+        [_, _, _, i, i, i, i, _, _, _],
+        ...emptyLines(18),
+        [_, _, _, x, x, x, x, _, _, _]
+      ]);
       await tick(1000, 19);
-      expect(cells[21][3].className).to.equal('I');
-      expect(cells[21][4].className).to.equal('I');
-      expect(cells[21][5].className).to.equal('I');
-      expect(cells[21][6].className).to.equal('I');
+      expect(readCells(playfield)).to.deep.equal([
+        ...emptyLines(21),
+        [_, _, _, i, i, i, i, _, _, _]
+      ]);
       //locks after 500ms
       await tick(500, 1);
       //clears lines after 500ms
       await tick(500, 1);
-      //spawns after 500ms
-      await tick(500, 1);
-      expect(cells[0][4].className).to.equal('O');
-      expect(cells[1][4].className).to.equal('O');
-      expect(cells[1][5].className).to.equal('O');
-      expect(cells[1][5].className).to.equal('O');
+      expect(readCells(playfield)).to.deep.equal([
+        [_, _, _, _, o, o, _, _, _, _],
+        [_, _, _, _, o, o, _, _, _, _],
+        ...emptyLines(17),
+        [_, _, _, _, x, x, _, _, _, _],
+        [_, _, _, _, x, x, _, _, _, _],
+        [_, _, _, i, i, i, i, _, _, _]
+      ]);
     });
 
     it('moves', async () => {
       renderGame();
       await play();
       const playfield = screen.getByTestId('playfield');
-      const cells = [...playfield.childNodes].map((row) => [...row.childNodes]);
       fireEvent.keyDown(document.body, {
         key: 't'
       });
@@ -212,45 +222,128 @@ describe('Game', () => {
         key: 'ArrowLeft'
       });
       await waitFor(() => undefined);
-      expect(cells[1][2].className).to.equal('I');
-      expect(cells[1][3].className).to.equal('I');
-      expect(cells[1][4].className).to.equal('I');
-      expect(cells[1][5].className).to.equal('I');
+      expect(readCells(playfield)).to.deep.equal([
+        ...emptyLines(1),
+        [_, _, i, i, i, i, _, _, _, _],
+        ...emptyLines(19),
+        [_, _, x, x, x, x, _, _, _, _]
+      ]);
       fireEvent.keyDown(document.body, {
         key: 'ArrowRight'
       });
-      expect(cells[1][3].className).to.equal('I');
-      expect(cells[1][4].className).to.equal('I');
-      expect(cells[1][5].className).to.equal('I');
-      expect(cells[1][6].className).to.equal('I');
+      expect(readCells(playfield)).to.deep.equal([
+        ...emptyLines(1),
+        [_, _, _, i, i, i, i, _, _, _],
+        ...emptyLines(19),
+        [_, _, _, x, x, x, x, _, _, _]
+      ]);
       fireEvent.keyDown(document.body, {
         key: 'ArrowDown'
       });
-      expect(cells[2][3].className).to.equal('I');
-      expect(cells[2][4].className).to.equal('I');
-      expect(cells[2][5].className).to.equal('I');
-      expect(cells[2][6].className).to.equal('I');
+      fireEvent.keyUp(document.body, {
+        key: 'ArrowDown'
+      });
+
+      expect(readCells(playfield)).to.deep.equal([
+        ...emptyLines(2),
+        [_, _, _, i, i, i, i, _, _, _],
+        ...emptyLines(18),
+        [_, _, _, x, x, x, x, _, _, _]
+      ]);
       fireEvent.keyDown(document.body, {
         key: 'ArrowUp'
       });
-      expect(cells[1][5].className).to.equal('I');
-      expect(cells[2][5].className).to.equal('I');
-      expect(cells[3][5].className).to.equal('I');
-      expect(cells[4][5].className).to.equal('I');
+      expect(readCells(playfield)).to.deep.equal([
+        ...emptyLines(1),
+        [_, _, _, _, _, i, _, _, _, _],
+        [_, _, _, _, _, i, _, _, _, _],
+        [_, _, _, _, _, i, _, _, _, _],
+        [_, _, _, _, _, i, _, _, _, _],
+        ...emptyLines(13),
+        [_, _, _, _, _, x, _, _, _, _],
+        [_, _, _, _, _, x, _, _, _, _],
+        [_, _, _, _, _, x, _, _, _, _],
+        [_, _, _, _, _, x, _, _, _, _]
+      ]);
       fireEvent.keyDown(document.body, {
         key: 'z'
       });
-      expect(cells[2][3].className).to.equal('I');
-      expect(cells[2][4].className).to.equal('I');
-      expect(cells[2][5].className).to.equal('I');
-      expect(cells[2][6].className).to.equal('I');
+      expect(readCells(playfield)).to.deep.equal([
+        ...emptyLines(2),
+        [_, _, _, i, i, i, i, _, _, _],
+        ...emptyLines(18),
+        [_, _, _, x, x, x, x, _, _, _]
+      ]);
       fireEvent.keyDown(document.body, {
         key: ' '
       });
-      expect(cells[21][3].className).to.equal('I');
-      expect(cells[21][4].className).to.equal('I');
-      expect(cells[21][5].className).to.equal('I');
-      expect(cells[21][6].className).to.equal('I');
+      expect(readCells(playfield)).to.deep.equal([
+        ...emptyLines(21),
+        [_, _, _, i, i, i, i, _, _, _]
+      ]);
+    });
+    it('auto repeats down with a delay (soft drop)', async () => {
+      renderGame();
+      await play();
+      const playfield = screen.getByTestId('playfield');
+      fireEvent.keyDown(document.body, {
+        key: 'ArrowDown'
+      });
+      const expectedInterval = 33;
+      await tick(99, 1);
+      expect(readCells(playfield)).to.deep.equal([
+        ...emptyLines(2),
+        [_, _, _, i, i, i, i, _, _, _],
+        ...emptyLines(18),
+        [_, _, _, x, x, x, x, _, _, _]
+      ]);
+      await tick(1, 1);
+      expect(readCells(playfield)).to.deep.equal([
+        ...emptyLines(3),
+        [_, _, _, i, i, i, i, _, _, _],
+        ...emptyLines(17),
+        [_, _, _, x, x, x, x, _, _, _]
+      ]);
+      fireEvent.keyUp(document.body, {
+        key: 'w'
+      });
+      await tick(expectedInterval, 1);
+      expect(readCells(playfield)).to.deep.equal([
+        ...emptyLines(4),
+        [_, _, _, i, i, i, i, _, _, _],
+        ...emptyLines(16),
+        [_, _, _, x, x, x, x, _, _, _]
+      ]);
+      fireEvent.keyUp(document.body, {
+        key: 'ArrowDown'
+      });
+      expect(readCells(playfield)).to.deep.equal([
+        ...emptyLines(4),
+        [_, _, _, i, i, i, i, _, _, _],
+        ...emptyLines(16),
+        [_, _, _, x, x, x, x, _, _, _]
+      ]);
+    });
+    it('ignores keyboards auto repeat when going down', async () => {
+      renderGame();
+      await play();
+      const playfield = screen.getByTestId('playfield');
+      fireEvent.keyDown(document.body, {
+        key: 'ArrowDown'
+      });
+      fireEvent.keyDown(document.body, {
+        key: 'ArrowDown',
+        repeat: true
+      });
+      expect(readCells(playfield)).to.deep.equal([
+        ...emptyLines(2),
+        [_, _, _, i, i, i, i, _, _, _],
+        ...emptyLines(18),
+        [_, _, _, x, x, x, x, _, _, _]
+      ]);
+      fireEvent.keyUp(document.body, {
+        key: 'ArrowDown'
+      });
     });
     it('holds when c is pressed', async () => {
       renderGame();
@@ -260,7 +353,7 @@ describe('Game', () => {
       const held = screen
         .getByText('HOLD')
         .parentNode.querySelector('.small-tetromino');
-      expect(readTetrominoCells(held)).to.deep.equal([
+      expect(readCells(held)).to.deep.equal([
         ['', '', '', ''],
         ['I', 'I', 'I', 'I'],
         ['', '', '', ''],

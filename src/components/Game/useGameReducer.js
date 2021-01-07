@@ -6,18 +6,57 @@ import { useEffect, useReducer } from 'react';
 import { directions } from '../../constants/directions';
 import { phases } from '../../constants/phases';
 
+const dispatchWith = (action) => (dispatch) => dispatch(action);
+const autoRepeat = (action, repeatInterval, cancelKey) => (dispatch, e) => {
+  if (e.repeat) {
+    return;
+  }
+  dispatch(action);
+  const delay = 100 - repeatInterval;
+  const timeout = setTimeout(() => {
+    const interval = setInterval(() => {
+      dispatch(action);
+    }, repeatInterval);
+    const cancelInterval = (e) => {
+      if (e.key === cancelKey) {
+        clearInterval(interval);
+        document.body.removeEventListener('keyup', cancelInterval);
+      }
+    };
+    document.body.addEventListener('keyup', cancelInterval);
+  }, delay);
+  const cancelTimeout = (e) => {
+    if (e.key === cancelKey) {
+      clearTimeout(timeout);
+      document.body.removeEventListener('keyup', cancelTimeout);
+    }
+  };
+  document.body.addEventListener('keyup', cancelTimeout);
+};
 const keyActionMappings = {
-  ArrowLeft: { type: 'move', payload: directions.left },
-  ArrowRight: { type: 'move', payload: directions.right },
-  ArrowDown: { type: 'move', payload: directions.down },
-  ArrowUp: { type: 'rotateRight' },
-  x: { type: 'rotateRight' },
-  ' ': { type: 'hardDrop' },
-  Escape: { type: 'pause' },
-  F1: { type: 'pause' },
-  z: { type: 'rotateLeft' },
-  Control: { type: 'rotateLeft' },
-  c: { type: 'hold' }
+  ArrowLeft: autoRepeat(
+    { type: 'move', payload: directions.left },
+    50,
+    'ArrowLeft'
+  ),
+  ArrowRight: autoRepeat(
+    { type: 'move', payload: directions.right },
+    50,
+    'ArrowRight'
+  ),
+  ArrowDown: autoRepeat(
+    { type: 'move', payload: directions.down },
+    33,
+    'ArrowDown'
+  ),
+  ArrowUp: dispatchWith({ type: 'rotateRight' }),
+  x: dispatchWith({ type: 'rotateRight' }),
+  ' ': dispatchWith({ type: 'hardDrop' }),
+  Escape: dispatchWith({ type: 'pause' }),
+  F1: dispatchWith({ type: 'pause' }),
+  z: dispatchWith({ type: 'rotateLeft' }),
+  Control: dispatchWith({ type: 'rotateLeft' }),
+  c: dispatchWith({ type: 'hold' })
 };
 export const UseGameReducer = (audio, randomizer) => () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -97,7 +136,7 @@ export const UseGameReducer = (audio, randomizer) => () => {
   useEffect(() => {
     const onKeydown = (e) => {
       if (keyActionMappings[e.key]) {
-        dispatch(keyActionMappings[e.key]);
+        keyActionMappings[e.key](dispatch, e);
         e.preventDefault();
       }
     };
