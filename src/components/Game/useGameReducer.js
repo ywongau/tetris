@@ -12,21 +12,21 @@ const autoRepeat = (action, repeatInterval, cancelKey) => (dispatch, e) => {
     return;
   }
   dispatch(action);
-  const delay = 100 - repeatInterval;
+  const delay = 200 - repeatInterval;
   const timeout = setTimeout(() => {
     const interval = setInterval(() => {
       dispatch(action);
     }, repeatInterval);
-    const cancelInterval = (e) => {
-      if (e.key === cancelKey) {
+    const cancelInterval = (keyUpEvent) => {
+      if (keyUpEvent.key === cancelKey) {
         clearInterval(interval);
         document.body.removeEventListener('keyup', cancelInterval);
       }
     };
     document.body.addEventListener('keyup', cancelInterval);
   }, delay);
-  const cancelTimeout = (e) => {
-    if (e.key === cancelKey) {
+  const cancelTimeout = (keyUpEvent) => {
+    if (keyUpEvent.key === cancelKey) {
       clearTimeout(timeout);
       document.body.removeEventListener('keyup', cancelTimeout);
     }

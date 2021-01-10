@@ -290,7 +290,7 @@ describe('Game', () => {
         key: 'ArrowDown'
       });
       const expectedInterval = 33;
-      await tick(99, 1);
+      await tick(199, 1);
       expect(readCells(playfield)).to.deep.equal([
         ...emptyLines(2),
         [_, _, _, i, i, i, i, _, _, _],
