@@ -33,7 +33,7 @@ const doLock = (state) => {
       };
 };
 
-const visitors = {
+const actions = {
   tick: (state) => {
     const { tetromino, playfield } = state;
     const updatedTetromino = move(tetromino, playfield, directions.down);
@@ -70,7 +70,7 @@ const visitors = {
         clearResult.linesCleared > 0
           ? 'clear' + clearResult.linesCleared
           : undefined,
-      interval: Math.max(100, 1000 - Math.floor(lines / 10) * 100),
+      interval: Math.max(50, 1000 - Math.floor(lines / 10) * 100),
       phase: phases.spawning
     };
   },
@@ -180,7 +180,7 @@ const validPhases = {
 };
 export const reducer = (state, action) =>
   validPhases[action.type]?.includes(state.phase)
-    ? visitors[action.type](state, action)
+    ? actions[action.type](state, action)
     : state;
 
 export const initialState = {

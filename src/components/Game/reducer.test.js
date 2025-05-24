@@ -186,7 +186,7 @@ describe('reducer', () => {
       );
       expect(result.interval).to.equal(900);
     });
-    it('limites minimum interval to 100', () => {
+    it('limites minimum interval to 50', () => {
       const result = reducer(
         {
           ...initialState,
@@ -197,7 +197,7 @@ describe('reducer', () => {
         },
         { type: 'clear' }
       );
-      expect(result.interval).to.equal(100);
+      expect(result.interval).to.equal(50);
     });
   });
   describe('rotation', () => {
